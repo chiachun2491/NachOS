@@ -25,6 +25,19 @@ Alarm::Alarm(bool doRandom)
     timer = new Timer(doRandom, this);
 }
 
+void Alarm::WaitUntil(int fromNow)
+{
+    DEBUG(dbgSleep, "Alarm::WaitUntil: " << fromNow);
+    Interrupt *interrupt = kernel->interrupt;
+    Scheduler *scheduler = kernel->scheduler;
+    Thread *thread = kernel->currentThread;
+    IntStatus oldLevel;
+
+    oldLevel = interrupt->SetLevel(IntOff);
+    scheduler->Sleep(thread, fromNow);
+    (void) interrupt->SetLevel(oldLevel);
+}
+
 //----------------------------------------------------------------------
 // Alarm::CallBack
 //	Software interrupt handler for the timer device. The timer device is
@@ -49,10 +62,14 @@ Alarm::Alarm(bool doRandom)
 void 
 Alarm::CallBack() 
 {
+    DEBUG(dbgSleep, "Alarm::Callback");
     Interrupt *interrupt = kernel->interrupt;
+    Scheduler *scheduler = kernel->scheduler;
     MachineStatus status = interrupt->getStatus();
-    
-    if (status == IdleMode) {	// is it time to quit?
+    bool woken = scheduler->Wakeup();
+
+    DEBUG(dbgSleep, "Alarm::Callback isBlockedEmpty: " << scheduler->isBlockedEmpty());
+    if (status == IdleMode && !woken && scheduler->isBlockedEmpty()) {	// is it time to quit?
         if (!interrupt->AnyFutureInterrupts()) {
 	    timer->Disable();	// turn off the timer
 	}

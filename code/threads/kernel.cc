@@ -34,7 +34,7 @@ ThreadedKernel::ThreadedKernel(int argc, char **argv)
 	    i++;
         } else if (strcmp(argv[i], "-u") == 0) {
             cout << "Partial usage: nachos [-rs randomSeed]\n";
-	}
+	    }
     }
 }
 

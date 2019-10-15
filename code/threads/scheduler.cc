@@ -23,6 +23,21 @@
 #include "scheduler.h"
 #include "main.h"
 
+blockedThread::blockedThread(Thread *t, int fromNow)
+{
+    thread = t;
+    when = kernel->stats->totalTicks + fromNow; 
+    DEBUG(dbgSleep, "blockedThread::blockedThread: " << thread->getName() << ", " << when);
+} 
+
+static int
+BlockedCompare (blockedThread *x, blockedThread *y)
+{
+    if (x->when < y->when) { return -1; }
+    else if (x->when > y->when) { return 1; }
+    else { return 0; }
+}
+
 //----------------------------------------------------------------------
 // Scheduler::Scheduler
 // 	Initialize the list of ready but not running threads.
@@ -33,6 +48,7 @@ Scheduler::Scheduler()
 {
 //	schedulerType = type;
 	readyList = new List<Thread *>; 
+    blockedList = new SortedList<blockedThread *>(BlockedCompare);
 	toBeDestroyed = NULL;
 } 
 
@@ -44,6 +60,7 @@ Scheduler::Scheduler()
 Scheduler::~Scheduler()
 { 
     delete readyList; 
+    delete blockedList;
 } 
 
 //----------------------------------------------------------------------
@@ -62,6 +79,54 @@ Scheduler::ReadyToRun (Thread *thread)
 
     thread->setStatus(READY);
     readyList->Append(thread);
+}
+
+void Scheduler::Sleep(Thread *thread, int fromNow)
+{
+    ASSERT(kernel->interrupt->getLevel() == IntOff);
+    DEBUG(dbgSleep, "Scheduler::Sleep: " << thread->getName() << ", " << fromNow);
+   
+    blockedThread *bt = new blockedThread(thread, fromNow);
+    blockedList->Insert(bt);
+    DEBUG(dbgSleep, "Scheduler::Sleep isBlockedEmpty: " << kernel->scheduler->isBlockedEmpty());
+    DEBUG(dbgSleep, "Scheduler::Sleep isBlockedEmpty: " << blockedList->IsEmpty());
+
+    thread->Sleep(false);
+}
+
+bool
+Scheduler::Wakeup ()
+{
+    ASSERT(kernel->interrupt->getLevel() == IntOff);
+    DEBUG(dbgSleep, "Scheduler::Wakeup");
+    
+    Statistics *stats = kernel->stats;
+    Scheduler *scheduler = kernel->scheduler;
+    ListIterator<blockedThread *> *it = new ListIterator<blockedThread *>(blockedList);
+    bool result = false;
+
+    while(!it->IsDone())
+    {
+        blockedThread *item = it->Item();
+        if(item->when < stats->totalTicks)
+        {
+            result = true;
+            it->Next();
+
+            scheduler->ReadyToRun(item->thread); 
+            blockedList->Remove(item);
+            delete item;
+        }
+        else
+        {
+            break;
+        }
+    }
+
+    delete it;
+
+    DEBUG(dbgSleep, "Scheduler::Wakeup return " << result);
+    return result;
 }
 
 //----------------------------------------------------------------------
