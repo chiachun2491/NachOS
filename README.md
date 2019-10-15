@@ -1,29 +1,39 @@
-Release notes for Nachos 4.0.
+# Build
+```
+git clone https://github.com/LJP-TW/NachOS.git
+cd NachOS
+sudo cp -r usr /
 
-Nachos 4.0 is somewhat of a re-write of Nachos 3.4.
-The main differences are:
+cd code
+make
+```
 
-1. better software engineering -- every class has its
-own selftest routines, 
+# Run example
+```
+cd NachOS/code
+./userprog/nachos -e test/example_sleep
+```
 
-2. the system is sligthly more portable (it was developed
-on an Alpha, and ported to DOS by a student)
+output:
+```
+Total threads number is 1
+Thread test/example_sleep is executing.
+Sleep :300000000
+Example value:1
+Sleep :300000000
+Example value:2
+Sleep :300000000
+Example value:3
+Sleep :300000000
+Example value:4
+return value:0
+No threads ready or runnable, and no pending interrupts.
+Assuming the program completed.
+Machine halting!
 
-3. uses templates for generic data structures
-
-4. reconfiguring for different machines is more 
-obvious
-
-5. somewhat different assignments (you can find these
-off the Web page, alas they were done in Word, so
-they can't be easily edited)
-
-6. the major downside is that it is no longer
-in synch with Narten's roadmap (see web page)
-
-My recommendation is that people currently using 3.4
-shouldn't bother to use 4.0, unless they need to run
-on a 64 bit machine or DOS.  Even those new to Nachos
-will find Narten's roadmap probably outweighs
-the benefits of using 4.0, except if they need
-DOS or Alpha support.
+Ticks: total 1200000500, idle 1200000268, system 110, user 122
+Disk I/O: reads 0, writes 0
+Console I/O: reads 0, writes 0
+Paging: faults 0
+Network I/O: packets received 0, sent 0
+```
