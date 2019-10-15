@@ -81,6 +81,13 @@ Scheduler::ReadyToRun (Thread *thread)
     readyList->Append(thread);
 }
 
+//----------------------------------------------------------------------
+// Scheduler::Sleep
+//  produce a blockedThread obj that contains when this thread wake up
+//
+//  "thread" -- the thread that going to sleep
+//  "fromNow" -- Tick count that this thread will sleep
+//----------------------------------------------------------------------
 void Scheduler::Sleep(Thread *thread, int fromNow)
 {
     ASSERT(kernel->interrupt->getLevel() == IntOff);
@@ -94,6 +101,11 @@ void Scheduler::Sleep(Thread *thread, int fromNow)
     thread->Sleep(false);
 }
 
+//----------------------------------------------------------------------
+// Scheduler::Wakeup
+//  Check if any thread need to wake up
+//  Return if any thread wakes up
+//----------------------------------------------------------------------
 bool
 Scheduler::Wakeup ()
 {

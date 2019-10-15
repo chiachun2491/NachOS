@@ -25,6 +25,13 @@ Alarm::Alarm(bool doRandom)
     timer = new Timer(doRandom, this);
 }
 
+//----------------------------------------------------------------------
+// Alarm::WaitUntil
+//      Put currentThread to blockedList to sleep until next fromNow tick
+//
+//      "fromNow" -- how many ticks does this thread back to 
+//      ready queue
+//----------------------------------------------------------------------
 void Alarm::WaitUntil(int fromNow)
 {
     DEBUG(dbgSleep, "Alarm::WaitUntil: " << fromNow);
@@ -66,6 +73,8 @@ Alarm::CallBack()
     Interrupt *interrupt = kernel->interrupt;
     Scheduler *scheduler = kernel->scheduler;
     MachineStatus status = interrupt->getStatus();
+    
+    // If there is any thread wakes up
     bool woken = scheduler->Wakeup();
 
     DEBUG(dbgSleep, "Alarm::Callback isBlockedEmpty: " << scheduler->isBlockedEmpty());

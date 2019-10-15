@@ -1,0 +1,43 @@
+# Intro
+This doc records the implementation of system call 'sleep'.
+
+---
+
+# sleep
+## userprog/syscall.h
+Define SC_Sleep, as number 13 system call.
+
+## userprog/exception.cc
+Handling SC_Sleep, call to kernel->alarm->WaitUntil(val).
+
+## threads/alarm.cc
+Implement Alarm::WaitUntil :
+call scheduler->Sleep.
+
+## threads/scheduler.cc
+Implement Scheduler::Sleep :
+Produce a blockedThread obj and inserting it to blocked queue,
+and then call thread->Sleep(false).
+Must process blocked list first and then call thread->Sleep(),
+this order cannot change.
+
+Implement blockedThread class.
+
+Initialize blocked queue at Scheduler constructor.
+Deleting blocked queue at Scheduler destructor.
+
+---
+
+# wake up
+## threads/alarm.cc
+Alarm construct a timer, and timer will callback to Alarm::Callback() periodically.
+Add scheduler->Wakeup() in Alarm::Callback() to check if any thread need to wake up.
+
+## threads/scheduler.cc
+Implement Scheduler::Wakeup
+
+---
+
+# Development
+## lib/debug.h
+Add debug flag dbgSleep for this 
