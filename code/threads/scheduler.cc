@@ -39,6 +39,15 @@ BlockedCompare (blockedThread *x, blockedThread *y)
 }
 
 //----------------------------------------------------------------------
+// Compare function
+//----------------------------------------------------------------------
+int PriorityCompare(Thread *a, Thread *b) {
+    if(a->getPriority() == b->getPriority())
+        return 0;
+    return a->getPriority() > b->getPriority() ? 1 : -1;
+}
+
+//----------------------------------------------------------------------
 // Scheduler::Scheduler
 // 	Initialize the list of ready but not running threads.
 //	Initially, no ready threads.
@@ -46,9 +55,27 @@ BlockedCompare (blockedThread *x, blockedThread *y)
 
 Scheduler::Scheduler()
 {
-//	schedulerType = type;
-	readyList = new List<Thread *>; 
+	Scheduler(RR);
+}
+
+Scheduler::Scheduler(SchedulerType type)
+{
     blockedList = new SortedList<blockedThread *>(BlockedCompare);
+	schedulerType = type;
+	switch(schedulerType) {
+    	case RR:
+        	readyList = new List<Thread *>;
+        	break;
+    	case SJF:
+		/* todo */
+        	break;
+    	case Priority:
+		readyList = new SortedList<Thread *>(PriorityCompare);
+        	break;
+    	case FIFO:
+		/* todo */
+		break;
+   	}
 	toBeDestroyed = NULL;
 } 
 
@@ -76,7 +103,7 @@ Scheduler::ReadyToRun (Thread *thread)
 {
     ASSERT(kernel->interrupt->getLevel() == IntOff);
     DEBUG(dbgThread, "Putting thread on ready list: " << thread->getName());
-
+    
     thread->setStatus(READY);
     readyList->Append(thread);
 }

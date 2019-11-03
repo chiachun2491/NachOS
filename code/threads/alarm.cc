@@ -76,6 +76,7 @@ Alarm::CallBack()
     
     // If there is any thread wakes up
     bool woken = scheduler->Wakeup();
+    kernel->currentThread->setPriority(kernel->currentThread->getPriority() - 1);
 
     DEBUG(dbgSleep, "Alarm::Callback isBlockedEmpty: " << scheduler->isBlockedEmpty());
     if (status == IdleMode && !woken && scheduler->isBlockedEmpty()) {	// is it time to quit?
@@ -83,7 +84,10 @@ Alarm::CallBack()
 	    timer->Disable();	// turn off the timer
 	}
     } else {			// there's someone to preempt
-	interrupt->YieldOnReturn();
+	if(kernel->scheduler->getSchedulerType() == RR ||
+            kernel->scheduler->getSchedulerType() == Priority ) {
+		interrupt->YieldOnReturn();
+	}
     }
 }
 
