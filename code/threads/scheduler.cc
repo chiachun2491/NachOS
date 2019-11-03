@@ -23,21 +23,6 @@
 #include "scheduler.h"
 #include "main.h"
 
-blockedThread::blockedThread(Thread *t, int fromNow)
-{
-    thread = t;
-    when = kernel->stats->totalTicks + fromNow; 
-    DEBUG(dbgSleep, "blockedThread::blockedThread: " << thread->getName() << ", " << when);
-} 
-
-static int
-BlockedCompare (blockedThread *x, blockedThread *y)
-{
-    if (x->when < y->when) { return -1; }
-    else if (x->when > y->when) { return 1; }
-    else { return 0; }
-}
-
 //----------------------------------------------------------------------
 // Compare function
 //----------------------------------------------------------------------
@@ -45,6 +30,26 @@ int PriorityCompare(Thread *a, Thread *b) {
     if(a->getPriority() == b->getPriority())
         return 0;
     return a->getPriority() > b->getPriority() ? 1 : -1;
+}
+
+int FIFOCompare(Thread *a, Thread *b) {
+    return 1;
+}
+
+int SJFCompare(Thread *a, Thread *b) {
+    if(a->getBurstTime() == b->getBurstTime())
+        return 0;
+    return a->getBurstTime() > b->getBurstTime() ? 1 : -1;
+}
+
+int SRTFCompare(Thread *a, Thread *b) {
+    if(a->getBurstTime() == b->getBurstTime())
+    {
+        if (a->getArrivalTime() == b->getArrivalTime())
+            return 0;
+        return a->getArrivalTime() > b->getArrivalTime() ? 1 : -1;
+    }
+    return a->getBurstTime() > b->getBurstTime() ? 1 : -1;
 }
 
 //----------------------------------------------------------------------
@@ -60,21 +65,23 @@ Scheduler::Scheduler()
 
 Scheduler::Scheduler(SchedulerType type)
 {
-    blockedList = new SortedList<blockedThread *>(BlockedCompare);
 	schedulerType = type;
 	switch(schedulerType) {
     	case RR:
         	readyList = new List<Thread *>;
         	break;
     	case SJF:
-		/* todo */
+		    readyList = new SortedList<Thread *>(SJFCompare);
         	break;
     	case Priority:
-		readyList = new SortedList<Thread *>(PriorityCompare);
+		    readyList = new SortedList<Thread *>(PriorityCompare);
         	break;
     	case FIFO:
-		/* todo */
-		break;
+		    readyList = new SortedList<Thread *>(FIFOCompare);
+		    break;
+        case SRTF:
+            readyList = new SortedList<Thread *>(SRTFCompare);
+            break;
    	}
 	toBeDestroyed = NULL;
 } 
@@ -87,7 +94,6 @@ Scheduler::Scheduler(SchedulerType type)
 Scheduler::~Scheduler()
 { 
     delete readyList; 
-    delete blockedList;
 } 
 
 //----------------------------------------------------------------------
@@ -109,66 +115,6 @@ Scheduler::ReadyToRun (Thread *thread)
 }
 
 //----------------------------------------------------------------------
-// Scheduler::Sleep
-//  produce a blockedThread obj that contains when this thread wake up
-//
-//  "thread" -- the thread that going to sleep
-//  "fromNow" -- Tick count that this thread will sleep
-//----------------------------------------------------------------------
-void Scheduler::Sleep(Thread *thread, int fromNow)
-{
-    ASSERT(kernel->interrupt->getLevel() == IntOff);
-    DEBUG(dbgSleep, "Scheduler::Sleep: " << thread->getName() << ", " << fromNow);
-   
-    blockedThread *bt = new blockedThread(thread, fromNow);
-    blockedList->Insert(bt);
-    DEBUG(dbgSleep, "Scheduler::Sleep isBlockedEmpty: " << kernel->scheduler->isBlockedEmpty());
-    DEBUG(dbgSleep, "Scheduler::Sleep isBlockedEmpty: " << blockedList->IsEmpty());
-
-    thread->Sleep(false);
-}
-
-//----------------------------------------------------------------------
-// Scheduler::Wakeup
-//  Check if any thread need to wake up
-//  Return if any thread wakes up
-//----------------------------------------------------------------------
-bool
-Scheduler::Wakeup ()
-{
-    ASSERT(kernel->interrupt->getLevel() == IntOff);
-    DEBUG(dbgSleep, "Scheduler::Wakeup");
-    
-    Statistics *stats = kernel->stats;
-    Scheduler *scheduler = kernel->scheduler;
-    ListIterator<blockedThread *> *it = new ListIterator<blockedThread *>(blockedList);
-    bool result = false;
-
-    while(!it->IsDone())
-    {
-        blockedThread *item = it->Item();
-        if(item->when < stats->totalTicks)
-        {
-            result = true;
-            it->Next();
-
-            scheduler->ReadyToRun(item->thread); 
-            blockedList->Remove(item);
-            delete item;
-        }
-        else
-        {
-            break;
-        }
-    }
-
-    delete it;
-
-    DEBUG(dbgSleep, "Scheduler::Wakeup return " << result);
-    return result;
-}
-
-//----------------------------------------------------------------------
 // Scheduler::FindNextToRun
 // 	Return the next thread to be scheduled onto the CPU.
 //	If there are no ready threads, return NULL.
@@ -185,6 +131,68 @@ Scheduler::FindNextToRun ()
 	return NULL;
     } else {
     	return readyList->RemoveFront();
+    }
+}
+
+//----------------------------------------------------------------------
+// Scheduler::GetNextToRun
+// 	Return the next thread to be scheduled onto the CPU.
+//	If there are no ready threads, return NULL.
+//----------------------------------------------------------------------
+
+Thread *
+Scheduler::GetNextToRun (bool advance)
+{
+    ASSERT(kernel->interrupt->getLevel() == IntOff);
+
+    if (readyList->IsEmpty()) 
+    {
+	    return NULL;
+    } 
+    else 
+    {
+        if (kernel->scheduler->getSchedulerType() == SRTF)
+        {
+            ListIterator<Thread *> *iter = new ListIterator<Thread *>(readyList);
+            // iter->Next();
+            cout << "GetNextTORun:" <<iter->Item()->getName() << endl;
+            Thread * smallest = iter->Item();
+
+            while (iter->Item()->getArrivalTime() > Thread::currentTime)
+            {
+                cout << "Compare Arrival Time Thread :" << iter->Item()->getName() << " arrival at time:" << iter->Item()->getArrivalTime() << " vs time:" << Thread::currentTime << endl;
+                iter->Next();
+                if (iter->IsDone()) break;
+                if (iter->Item()->getArrivalTime() < smallest->getArrivalTime()) smallest = iter->Item();
+            }
+            if (!iter->IsDone())
+            {
+                Thread *t = iter->Item(); // Backup
+                readyList->Remove(iter->Item());
+                cout << "Remove Item and Prepend: " << t->getName() << endl;
+                return t;
+            }
+            else
+            {
+                cout << "404" << endl;
+                if (advance)
+                {
+                    cout << "-----------------Time:" << Thread::currentTime << "----------------"<< endl;
+                    Thread::currentTime = smallest->getArrivalTime();
+                    readyList->Remove(smallest);
+                    return smallest;
+                }
+                else
+                {
+                    return NULL;
+                }
+            }
+            
+        }
+        else
+        {
+            return readyList->Front();
+        }
     }
 }
 
@@ -287,4 +295,5 @@ Scheduler::Print()
 {
     cout << "Ready list contents:\n";
     readyList->Apply(ThreadPrint);
+    cout << "\n";
 }

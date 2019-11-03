@@ -13,12 +13,6 @@
 #include "list.h"
 #include "thread.h"
 
-struct blockedThread {
-    blockedThread(Thread *t, int fromNow);
-    Thread *thread;
-    int when; // when to wakeup
-};
-
 // The following class defines the scheduler/dispatcher abstraction -- 
 // the data structures and operations needed to keep track of which 
 // thread is running, and which threads are ready but not running.
@@ -27,7 +21,8 @@ enum SchedulerType {
         RR,     // Round Robin
         SJF,
         Priority,
-	FIFO
+		FIFO,
+		SRTF
 };
 
 class Scheduler {
@@ -38,14 +33,10 @@ class Scheduler {
 
 	void ReadyToRun(Thread* thread);	
     					// Thread can be dispatched.
-    bool Wakeup(); // Wakeup blockedList
-
-    void Sleep(Thread *thread, int fromNow);
-
-    bool isBlockedEmpty() { return blockedList->IsEmpty(); };
-
 	Thread* FindNextToRun();	// Dequeue first thread on the ready 
 					// list, if any, and return thread.
+	Thread* GetNextToRun(bool advance);		
+						// Only get next thread on the ready list
 	void Run(Thread* nextThread, bool finishing);
 	    				// Cause nextThread to start running
 	void CheckToBeDestroyed();	// Check if thread that had been
@@ -59,9 +50,8 @@ class Scheduler {
     
   private:
 	SchedulerType schedulerType;
-	List<Thread *> *readyList;  // queue of threads that are ready to run,
-					            // but not running
-    SortedList<blockedThread *> *blockedList; // queue of threads that are sleeping
+	List<Thread *> *readyList;	// queue of threads that are ready to run,
+					// but not running
 	Thread *toBeDestroyed;		// finishing thread to be destroyed
     					// by the next thread that runs
 };
