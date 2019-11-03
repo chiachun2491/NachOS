@@ -23,9 +23,5 @@ coff2noff
 # Temp file
 *.swp
 
-# ELF
-/code/threads/nachos
-/code/userprog/nachos
-
 # Log
 /code/log
