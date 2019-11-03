@@ -14,3 +14,18 @@ coff2noff
 #/code/test/*.c
 #/code/test/*
 #/code/test/halt
+/code/test/*
+!/code/test/*.c
+!/code/test/*.s
+!/code/test/Makefile
+!/code/test/script
+
+# Temp file
+*.swp
+
+# ELF
+/code/threads/nachos
+/code/userprog/nachos
+
+# Log
+/code/log
