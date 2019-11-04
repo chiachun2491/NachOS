@@ -37,9 +37,13 @@ int FIFOCompare(Thread *a, Thread *b) {
 }
 
 int SJFCompare(Thread *a, Thread *b) {
-    if(a->getBurstTime() == b->getBurstTime())
-        return 0;
-    return a->getBurstTime() > b->getBurstTime() ? 1 : -1;
+    if(a->getArrivalTime() == b->getArrivalTime())
+    {
+        if (a->getBurstTime() == b->getBurstTime())
+            return 0;
+        return a->getBurstTime() > b->getBurstTime() ? 1 : -1;
+    }
+    return a->getArrivalTime() > b->getArrivalTime() ? 1 : -1;
 }
 
 int SRTFCompare(Thread *a, Thread *b) {
