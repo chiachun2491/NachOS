@@ -456,9 +456,14 @@ SimpleThread()
         Thread::currentTime++;
     	printf("%s: %d\n", kernel->currentThread->getName(), kernel->currentThread->getBurstTime());
         
-        // todo check type
-        kernel->currentThread->Yield();
-    	// kernel->interrupt->OneTick();
+        if (kernel->scheduler->getSchedulerType() == SRTF)
+        {
+            kernel->currentThread->Yield();
+        }
+        else
+        {
+            kernel->interrupt->OneTick();
+        }
     }
 }
 
