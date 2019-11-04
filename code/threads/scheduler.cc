@@ -159,12 +159,12 @@ Scheduler::GetNextToRun (bool advance)
         {
             ListIterator<Thread *> *iter = new ListIterator<Thread *>(readyList);
             // iter->Next();
-            cout << "GetNextTORun:" <<iter->Item()->getName() << endl;
+           	DEBUG (dbgThread, "GetNextTORun:" <<iter->Item()->getName() << endl);
             Thread * smallest = iter->Item();
 
             while (iter->Item()->getArrivalTime() > Thread::currentTime)
             {
-                cout << "Compare Arrival Time Thread :" << iter->Item()->getName() << " arrival at time:" << iter->Item()->getArrivalTime() << " vs time:" << Thread::currentTime << endl;
+				DEBUG(dbgThread, "Compare Arrival Time Thread :" << iter->Item()->getName() << " arrival at time:" << iter->Item()->getArrivalTime() << " vs time:" << Thread::currentTime     << endl);
                 iter->Next();
                 if (iter->IsDone()) break;
                 if (iter->Item()->getArrivalTime() < smallest->getArrivalTime()) smallest = iter->Item();
@@ -173,15 +173,15 @@ Scheduler::GetNextToRun (bool advance)
             {
                 Thread *t = iter->Item(); // Backup
                 readyList->Remove(iter->Item());
-                cout << "Remove Item and Prepend: " << t->getName() << endl;
+                DEBUG (dbgThread, "Remove Item and Prepend: " << t->getName() << endl);
                 return t;
             }
             else
             {
-                cout << "404" << endl;
+                DEBUG (dbgThread, "404" << endl);
                 if (advance)
                 {
-                    cout << "-----------------Time:" << Thread::currentTime << "----------------"<< endl;
+                    DEBUG (dbgThread, "-----------------Time:" << Thread::currentTime << "----------------"<< endl);
                     Thread::currentTime = smallest->getArrivalTime();
                     readyList->Remove(smallest);
                     return smallest;
