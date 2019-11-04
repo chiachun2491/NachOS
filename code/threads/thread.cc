@@ -455,6 +455,8 @@ SimpleThread()
         thread->setBurstTime(thread->getBurstTime() - 1);
         Thread::currentTime++;
     	printf("%s: %d\n", kernel->currentThread->getName(), kernel->currentThread->getBurstTime());
+        
+        // todo check type
         kernel->currentThread->Yield();
     	// kernel->interrupt->OneTick();
     }
