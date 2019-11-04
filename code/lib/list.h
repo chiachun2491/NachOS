@@ -131,7 +131,8 @@ class ListIterator {
 
     void Next() { current = current->next; };		
 				// update iterator to point to next
-
+	
+	ListElement<T> * GetCurrent() { return current; };
   private:
     ListElement<T> *current;	// where we are in the list
 };

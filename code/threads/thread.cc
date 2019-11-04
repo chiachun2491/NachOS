@@ -210,18 +210,22 @@ Thread::Yield ()
     
     DEBUG(dbgThread, "Yielding thread: " << name);
 
-    if (kernel->scheduler->getSchedulerType() == SRTF)
+    if (kernel->scheduler->getSchedulerType() == SRTF || kernel->scheduler->getSchedulerType() == Priority)
     {
         nextThread = kernel->scheduler->GetNextToRun(false);
         // while (nextThread->getArrivalTime() > Thread::currentTime)
         // {
         //     nextThread = nextThread->next;
         // }
+		//debug
+		cout << nextThread->getName() << endl;
         if (nextThread != NULL) 
 	    {
-            if (this->getBurstTime() < nextThread->getBurstTime())
+            if (this->getBurstTime() < nextThread->getBurstTime() || this->getPriority() < nextThread->getPriority() )
             {
-			    kernel->scheduler->ReadyToRun(nextThread);                               
+			    kernel->scheduler->ReadyToRun(nextThread);
+				//debug
+				kernel->scheduler->Print(); 
                 nextThread = this;
             }
             if (nextThread != this) 
@@ -236,6 +240,8 @@ Thread::Yield ()
     else 
     {
         nextThread = kernel->scheduler->FindNextToRun();
+		//debug
+        cout << nextThread->getName() << endl;
         if (nextThread != NULL) {
 	        kernel->scheduler->ReadyToRun(this);
 	        kernel->scheduler->Run(nextThread, FALSE);

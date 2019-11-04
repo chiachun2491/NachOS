@@ -1,0 +1,1076 @@
+Entering main
+Scheduling interrupt handler the timer at time = 100
+	interrupts: off -> on
+== Tick 10 ==
+	interrupts: on -> off
+Time: 10, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 100
+End of pending interrupts
+	interrupts: off -> on
+Total threads number is 2
+Forking thread: ./test/test1 f(a): 134586339 0x8fb0460
+	interrupts: on -> off
+Putting thread on ready list: ./test/test1
+	interrupts: off -> on
+== Tick 20 ==
+	interrupts: on -> off
+Time: 20, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 100
+End of pending interrupts
+	interrupts: off -> on
+Thread ./test/test1 is executing.
+Forking thread: ./test/test2 f(a): 134586339 0x8fb4678
+	interrupts: on -> off
+Putting thread on ready list: ./test/test2
+	interrupts: off -> on
+== Tick 30 ==
+	interrupts: on -> off
+Time: 30, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 100
+End of pending interrupts
+	interrupts: off -> on
+Thread ./test/test2 is executing.
+	interrupts: on -> off
+Finishing thread: main
+Sleeping thread: main
+next run is ./test/test2
+Switching from: main to: ./test/test2
+Beginning thread: ./test/test2
+Deleting thread: main
+	interrupts: off -> on
+== Tick 40 ==
+	interrupts: on -> off
+Time: 40, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 100
+End of pending interrupts
+	interrupts: off -> on
+== Tick 41 ==
+	interrupts: on -> off
+Time: 41, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 100
+End of pending interrupts
+	interrupts: off -> on
+== Tick 42 ==
+	interrupts: on -> off
+Time: 42, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 100
+End of pending interrupts
+	interrupts: off -> on
+== Tick 43 ==
+	interrupts: on -> off
+Time: 43, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 100
+End of pending interrupts
+	interrupts: off -> on
+== Tick 44 ==
+	interrupts: on -> off
+Time: 44, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 100
+End of pending interrupts
+	interrupts: off -> on
+== Tick 45 ==
+	interrupts: on -> off
+Time: 45, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 100
+End of pending interrupts
+	interrupts: off -> on
+== Tick 46 ==
+	interrupts: on -> off
+Time: 46, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 100
+End of pending interrupts
+	interrupts: off -> on
+== Tick 47 ==
+	interrupts: on -> off
+Time: 47, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 100
+End of pending interrupts
+	interrupts: off -> on
+== Tick 48 ==
+	interrupts: on -> off
+Time: 48, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 100
+End of pending interrupts
+	interrupts: off -> on
+== Tick 49 ==
+	interrupts: on -> off
+Time: 49, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 100
+End of pending interrupts
+	interrupts: off -> on
+== Tick 50 ==
+	interrupts: on -> off
+Time: 50, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 100
+End of pending interrupts
+	interrupts: off -> on
+== Tick 51 ==
+	interrupts: on -> off
+Time: 51, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 100
+End of pending interrupts
+	interrupts: off -> on
+== Tick 52 ==
+	interrupts: on -> off
+Time: 52, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 100
+End of pending interrupts
+	interrupts: off -> on
+== Tick 53 ==
+	interrupts: on -> off
+Time: 53, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 100
+End of pending interrupts
+	interrupts: off -> on
+== Tick 54 ==
+	interrupts: on -> off
+Time: 54, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 100
+End of pending interrupts
+	interrupts: off -> on
+== Tick 55 ==
+	interrupts: on -> off
+Time: 55, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 100
+End of pending interrupts
+	interrupts: off -> on
+== Tick 56 ==
+	interrupts: on -> off
+Time: 56, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 100
+End of pending interrupts
+	interrupts: off -> on
+== Tick 57 ==
+	interrupts: on -> off
+Time: 57, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 100
+End of pending interrupts
+	interrupts: off -> on
+== Tick 58 ==
+	interrupts: on -> off
+Time: 58, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 100
+End of pending interrupts
+	interrupts: off -> on
+== Tick 59 ==
+	interrupts: on -> off
+Time: 59, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 100
+End of pending interrupts
+	interrupts: off -> on
+== Tick 60 ==
+	interrupts: on -> off
+Time: 60, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 100
+End of pending interrupts
+	interrupts: off -> on
+Print integer:20
+== Tick 61 ==
+	interrupts: on -> off
+Time: 61, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 100
+End of pending interrupts
+	interrupts: off -> on
+== Tick 62 ==
+	interrupts: on -> off
+Time: 62, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 100
+End of pending interrupts
+	interrupts: off -> on
+== Tick 63 ==
+	interrupts: on -> off
+Time: 63, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 100
+End of pending interrupts
+	interrupts: off -> on
+== Tick 64 ==
+	interrupts: on -> off
+Time: 64, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 100
+End of pending interrupts
+	interrupts: off -> on
+== Tick 65 ==
+	interrupts: on -> off
+Time: 65, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 100
+End of pending interrupts
+	interrupts: off -> on
+== Tick 66 ==
+	interrupts: on -> off
+Time: 66, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 100
+End of pending interrupts
+	interrupts: off -> on
+== Tick 67 ==
+	interrupts: on -> off
+Time: 67, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 100
+End of pending interrupts
+	interrupts: off -> on
+== Tick 68 ==
+	interrupts: on -> off
+Time: 68, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 100
+End of pending interrupts
+	interrupts: off -> on
+== Tick 69 ==
+	interrupts: on -> off
+Time: 69, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 100
+End of pending interrupts
+	interrupts: off -> on
+== Tick 70 ==
+	interrupts: on -> off
+Time: 70, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 100
+End of pending interrupts
+	interrupts: off -> on
+== Tick 71 ==
+	interrupts: on -> off
+Time: 71, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 100
+End of pending interrupts
+	interrupts: off -> on
+== Tick 72 ==
+	interrupts: on -> off
+Time: 72, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 100
+End of pending interrupts
+	interrupts: off -> on
+== Tick 73 ==
+	interrupts: on -> off
+Time: 73, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 100
+End of pending interrupts
+	interrupts: off -> on
+== Tick 74 ==
+	interrupts: on -> off
+Time: 74, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 100
+End of pending interrupts
+	interrupts: off -> on
+== Tick 75 ==
+	interrupts: on -> off
+Time: 75, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 100
+End of pending interrupts
+	interrupts: off -> on
+== Tick 76 ==
+	interrupts: on -> off
+Time: 76, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 100
+End of pending interrupts
+	interrupts: off -> on
+== Tick 77 ==
+	interrupts: on -> off
+Time: 77, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 100
+End of pending interrupts
+	interrupts: off -> on
+Print integer:21
+== Tick 78 ==
+	interrupts: on -> off
+Time: 78, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 100
+End of pending interrupts
+	interrupts: off -> on
+== Tick 79 ==
+	interrupts: on -> off
+Time: 79, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 100
+End of pending interrupts
+	interrupts: off -> on
+== Tick 80 ==
+	interrupts: on -> off
+Time: 80, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 100
+End of pending interrupts
+	interrupts: off -> on
+== Tick 81 ==
+	interrupts: on -> off
+Time: 81, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 100
+End of pending interrupts
+	interrupts: off -> on
+== Tick 82 ==
+	interrupts: on -> off
+Time: 82, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 100
+End of pending interrupts
+	interrupts: off -> on
+== Tick 83 ==
+	interrupts: on -> off
+Time: 83, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 100
+End of pending interrupts
+	interrupts: off -> on
+== Tick 84 ==
+	interrupts: on -> off
+Time: 84, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 100
+End of pending interrupts
+	interrupts: off -> on
+== Tick 85 ==
+	interrupts: on -> off
+Time: 85, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 100
+End of pending interrupts
+	interrupts: off -> on
+== Tick 86 ==
+	interrupts: on -> off
+Time: 86, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 100
+End of pending interrupts
+	interrupts: off -> on
+== Tick 87 ==
+	interrupts: on -> off
+Time: 87, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 100
+End of pending interrupts
+	interrupts: off -> on
+== Tick 88 ==
+	interrupts: on -> off
+Time: 88, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 100
+End of pending interrupts
+	interrupts: off -> on
+== Tick 89 ==
+	interrupts: on -> off
+Time: 89, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 100
+End of pending interrupts
+	interrupts: off -> on
+== Tick 90 ==
+	interrupts: on -> off
+Time: 90, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 100
+End of pending interrupts
+	interrupts: off -> on
+== Tick 91 ==
+	interrupts: on -> off
+Time: 91, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 100
+End of pending interrupts
+	interrupts: off -> on
+== Tick 92 ==
+	interrupts: on -> off
+Time: 92, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 100
+End of pending interrupts
+	interrupts: off -> on
+== Tick 93 ==
+	interrupts: on -> off
+Time: 93, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 100
+End of pending interrupts
+	interrupts: off -> on
+== Tick 94 ==
+	interrupts: on -> off
+Time: 94, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 100
+End of pending interrupts
+	interrupts: off -> on
+Print integer:22
+== Tick 95 ==
+	interrupts: on -> off
+Time: 95, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 100
+End of pending interrupts
+	interrupts: off -> on
+== Tick 96 ==
+	interrupts: on -> off
+Time: 96, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 100
+End of pending interrupts
+	interrupts: off -> on
+== Tick 97 ==
+	interrupts: on -> off
+Time: 97, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 100
+End of pending interrupts
+	interrupts: off -> on
+== Tick 98 ==
+	interrupts: on -> off
+Time: 98, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 100
+End of pending interrupts
+	interrupts: off -> on
+== Tick 99 ==
+	interrupts: on -> off
+Time: 99, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 100
+End of pending interrupts
+	interrupts: off -> on
+== Tick 100 ==
+	interrupts: on -> off
+Time: 100, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 100
+End of pending interrupts
+Invoking interrupt handler for the 
+timer at time 100
+Scheduling interrupt handler the timer at time = 200
+	interrupts: off -> on
+	interrupts: on -> off
+Yielding thread: ./test/test2
+GetNextTORun:./test/test1
+Remove Item and Prepend: ./test/test1
+./test/test1
+Putting thread on ready list: ./test/test1
+Ready list contents:
+./test/test1
+	interrupts: off -> on
+== Tick 110 ==
+	interrupts: on -> off
+Time: 110, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 200
+End of pending interrupts
+	interrupts: off -> on
+== Tick 111 ==
+	interrupts: on -> off
+Time: 111, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 200
+End of pending interrupts
+	interrupts: off -> on
+== Tick 112 ==
+	interrupts: on -> off
+Time: 112, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 200
+End of pending interrupts
+	interrupts: off -> on
+== Tick 113 ==
+	interrupts: on -> off
+Time: 113, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 200
+End of pending interrupts
+	interrupts: off -> on
+== Tick 114 ==
+	interrupts: on -> off
+Time: 114, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 200
+End of pending interrupts
+	interrupts: off -> on
+== Tick 115 ==
+	interrupts: on -> off
+Time: 115, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 200
+End of pending interrupts
+	interrupts: off -> on
+== Tick 116 ==
+	interrupts: on -> off
+Time: 116, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 200
+End of pending interrupts
+	interrupts: off -> on
+== Tick 117 ==
+	interrupts: on -> off
+Time: 117, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 200
+End of pending interrupts
+	interrupts: off -> on
+== Tick 118 ==
+	interrupts: on -> off
+Time: 118, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 200
+End of pending interrupts
+	interrupts: off -> on
+== Tick 119 ==
+	interrupts: on -> off
+Time: 119, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 200
+End of pending interrupts
+	interrupts: off -> on
+== Tick 120 ==
+	interrupts: on -> off
+Time: 120, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 200
+End of pending interrupts
+	interrupts: off -> on
+== Tick 121 ==
+	interrupts: on -> off
+Time: 121, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 200
+End of pending interrupts
+	interrupts: off -> on
+Print integer:23
+== Tick 122 ==
+	interrupts: on -> off
+Time: 122, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 200
+End of pending interrupts
+	interrupts: off -> on
+== Tick 123 ==
+	interrupts: on -> off
+Time: 123, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 200
+End of pending interrupts
+	interrupts: off -> on
+== Tick 124 ==
+	interrupts: on -> off
+Time: 124, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 200
+End of pending interrupts
+	interrupts: off -> on
+== Tick 125 ==
+	interrupts: on -> off
+Time: 125, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 200
+End of pending interrupts
+	interrupts: off -> on
+== Tick 126 ==
+	interrupts: on -> off
+Time: 126, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 200
+End of pending interrupts
+	interrupts: off -> on
+== Tick 127 ==
+	interrupts: on -> off
+Time: 127, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 200
+End of pending interrupts
+	interrupts: off -> on
+== Tick 128 ==
+	interrupts: on -> off
+Time: 128, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 200
+End of pending interrupts
+	interrupts: off -> on
+== Tick 129 ==
+	interrupts: on -> off
+Time: 129, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 200
+End of pending interrupts
+	interrupts: off -> on
+== Tick 130 ==
+	interrupts: on -> off
+Time: 130, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 200
+End of pending interrupts
+	interrupts: off -> on
+== Tick 131 ==
+	interrupts: on -> off
+Time: 131, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 200
+End of pending interrupts
+	interrupts: off -> on
+== Tick 132 ==
+	interrupts: on -> off
+Time: 132, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 200
+End of pending interrupts
+	interrupts: off -> on
+== Tick 133 ==
+	interrupts: on -> off
+Time: 133, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 200
+End of pending interrupts
+	interrupts: off -> on
+== Tick 134 ==
+	interrupts: on -> off
+Time: 134, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 200
+End of pending interrupts
+	interrupts: off -> on
+== Tick 135 ==
+	interrupts: on -> off
+Time: 135, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 200
+End of pending interrupts
+	interrupts: off -> on
+== Tick 136 ==
+	interrupts: on -> off
+Time: 136, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 200
+End of pending interrupts
+	interrupts: off -> on
+== Tick 137 ==
+	interrupts: on -> off
+Time: 137, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 200
+End of pending interrupts
+	interrupts: off -> on
+== Tick 138 ==
+	interrupts: on -> off
+Time: 138, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 200
+End of pending interrupts
+	interrupts: off -> on
+Print integer:24
+== Tick 139 ==
+	interrupts: on -> off
+Time: 139, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 200
+End of pending interrupts
+	interrupts: off -> on
+== Tick 140 ==
+	interrupts: on -> off
+Time: 140, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 200
+End of pending interrupts
+	interrupts: off -> on
+== Tick 141 ==
+	interrupts: on -> off
+Time: 141, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 200
+End of pending interrupts
+	interrupts: off -> on
+== Tick 142 ==
+	interrupts: on -> off
+Time: 142, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 200
+End of pending interrupts
+	interrupts: off -> on
+== Tick 143 ==
+	interrupts: on -> off
+Time: 143, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 200
+End of pending interrupts
+	interrupts: off -> on
+== Tick 144 ==
+	interrupts: on -> off
+Time: 144, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 200
+End of pending interrupts
+	interrupts: off -> on
+== Tick 145 ==
+	interrupts: on -> off
+Time: 145, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 200
+End of pending interrupts
+	interrupts: off -> on
+== Tick 146 ==
+	interrupts: on -> off
+Time: 146, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 200
+End of pending interrupts
+	interrupts: off -> on
+== Tick 147 ==
+	interrupts: on -> off
+Time: 147, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 200
+End of pending interrupts
+	interrupts: off -> on
+== Tick 148 ==
+	interrupts: on -> off
+Time: 148, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 200
+End of pending interrupts
+	interrupts: off -> on
+== Tick 149 ==
+	interrupts: on -> off
+Time: 149, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 200
+End of pending interrupts
+	interrupts: off -> on
+== Tick 150 ==
+	interrupts: on -> off
+Time: 150, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 200
+End of pending interrupts
+	interrupts: off -> on
+== Tick 151 ==
+	interrupts: on -> off
+Time: 151, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 200
+End of pending interrupts
+	interrupts: off -> on
+== Tick 152 ==
+	interrupts: on -> off
+Time: 152, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 200
+End of pending interrupts
+	interrupts: off -> on
+== Tick 153 ==
+	interrupts: on -> off
+Time: 153, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 200
+End of pending interrupts
+	interrupts: off -> on
+== Tick 154 ==
+	interrupts: on -> off
+Time: 154, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 200
+End of pending interrupts
+	interrupts: off -> on
+== Tick 155 ==
+	interrupts: on -> off
+Time: 155, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 200
+End of pending interrupts
+	interrupts: off -> on
+Print integer:25
+== Tick 156 ==
+	interrupts: on -> off
+Time: 156, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 200
+End of pending interrupts
+	interrupts: off -> on
+== Tick 157 ==
+	interrupts: on -> off
+Time: 157, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 200
+End of pending interrupts
+	interrupts: off -> on
+== Tick 158 ==
+	interrupts: on -> off
+Time: 158, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 200
+End of pending interrupts
+	interrupts: off -> on
+== Tick 159 ==
+	interrupts: on -> off
+Time: 159, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 200
+End of pending interrupts
+	interrupts: off -> on
+== Tick 160 ==
+	interrupts: on -> off
+Time: 160, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 200
+End of pending interrupts
+	interrupts: off -> on
+== Tick 161 ==
+	interrupts: on -> off
+Time: 161, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 200
+End of pending interrupts
+	interrupts: off -> on
+== Tick 162 ==
+	interrupts: on -> off
+Time: 162, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 200
+End of pending interrupts
+	interrupts: off -> on
+== Tick 163 ==
+	interrupts: on -> off
+Time: 163, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 200
+End of pending interrupts
+	interrupts: off -> on
+== Tick 164 ==
+	interrupts: on -> off
+Time: 164, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 200
+End of pending interrupts
+	interrupts: off -> on
+== Tick 165 ==
+	interrupts: on -> off
+Time: 165, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 200
+End of pending interrupts
+	interrupts: off -> on
+== Tick 166 ==
+	interrupts: on -> off
+Time: 166, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 200
+End of pending interrupts
+	interrupts: off -> on
+== Tick 167 ==
+	interrupts: on -> off
+Time: 167, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 200
+End of pending interrupts
+	interrupts: off -> on
+== Tick 168 ==
+	interrupts: on -> off
+Time: 168, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 200
+End of pending interrupts
+	interrupts: off -> on
+== Tick 169 ==
+	interrupts: on -> off
+Time: 169, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 200
+End of pending interrupts
+	interrupts: off -> on
+== Tick 170 ==
+	interrupts: on -> off
+Time: 170, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 200
+End of pending interrupts
+	interrupts: off -> on
+== Tick 171 ==
+	interrupts: on -> off
+Time: 171, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 200
+End of pending interrupts
+	interrupts: off -> on
+== Tick 172 ==
+	interrupts: on -> off
+Time: 172, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 200
+End of pending interrupts
+	interrupts: off -> on
+== Tick 173 ==
+	interrupts: on -> off
+Time: 173, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 200
+End of pending interrupts
+	interrupts: off -> on
+== Tick 174 ==
+	interrupts: on -> off
+Time: 174, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 200
+End of pending interrupts
+	interrupts: off -> on
+== Tick 175 ==
+	interrupts: on -> off
+Time: 175, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 200
+End of pending interrupts
+	interrupts: off -> on
+== Tick 176 ==
+	interrupts: on -> off
+Time: 176, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 200
+End of pending interrupts
+	interrupts: off -> on
+== Tick 177 ==
+	interrupts: on -> off
+Time: 177, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 200
+End of pending interrupts
+	interrupts: off -> on
+== Tick 178 ==
+	interrupts: on -> off
+Time: 178, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 200
+End of pending interrupts
+	interrupts: off -> on
+return value:0
+	interrupts: on -> off
+Finishing thread: ./test/test2
+Sleeping thread: ./test/test2
+next run is ./test/test1
+Switching from: ./test/test2 to: ./test/test1
+Beginning thread: ./test/test1
+Deleting thread: ./test/test2
+	interrupts: off -> on
+== Tick 188 ==
+	interrupts: on -> off
+Time: 188, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 200
+End of pending interrupts
+	interrupts: off -> on
+== Tick 189 ==
+	interrupts: on -> off
+Time: 189, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 200
+End of pending interrupts
+	interrupts: off -> on
+== Tick 190 ==
+	interrupts: on -> off
+Time: 190, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 200
+End of pending interrupts
+	interrupts: off -> on
+== Tick 191 ==
+	interrupts: on -> off
+Time: 191, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 200
+End of pending interrupts
+	interrupts: off -> on
+== Tick 192 ==
+	interrupts: on -> off
+Time: 192, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 200
+End of pending interrupts
+	interrupts: off -> on
+== Tick 193 ==
+	interrupts: on -> off
+Time: 193, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 200
+End of pending interrupts
+	interrupts: off -> on
+== Tick 194 ==
+	interrupts: on -> off
+Time: 194, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 200
+End of pending interrupts
+	interrupts: off -> on
+== Tick 195 ==
+	interrupts: on -> off
+Time: 195, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 200
+End of pending interrupts
+	interrupts: off -> on
+== Tick 196 ==
+	interrupts: on -> off
+Time: 196, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 200
+End of pending interrupts
+	interrupts: off -> on
+== Tick 197 ==
+	interrupts: on -> off
+Time: 197, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 200
+End of pending interrupts
+	interrupts: off -> on
+== Tick 198 ==
+	interrupts: on -> off
+Time: 198, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 200
+End of pending interrupts
+	interrupts: off -> on
+== Tick 199 ==
+	interrupts: on -> off
+Time: 199, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 200
+End of pending interrupts
+	interrupts: off -> on
+== Tick 200 ==
+	interrupts: on -> off
+Time: 200, interrupts off
+Pending interrupts:
+Interrupt handler timer, scheduled at 200
+End of pending interrupts
+Invoking interrupt handler for the 
+timer at time 200
+Scheduling interrupt handler the timer at time = 300
+	interrupts: off -> on
+	interrupts: on -> off
+Yielding thread: ./test/test1

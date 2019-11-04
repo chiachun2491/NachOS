@@ -193,6 +193,35 @@ Scheduler::GetNextToRun (bool advance)
             }
             
         }
+		else if (kernel->scheduler->getSchedulerType() == Priority)
+		{
+			 ListIterator<Thread *> *iter = new ListIterator<Thread *>(readyList);
+            // iter->Next();
+            cout << "GetNextTORun:" <<iter->Item()->getName() << endl;
+            Thread * smallest = iter->Item();
+			//debug
+			cout << kernel->currentThread->getName() << endl;
+            while (iter->Item()->getPriority() > kernel->currentThread->getPriority())
+            {
+                cout << "Compare Priority Thread :" << iter->Item()->getName() << " arrival at time:" << iter->Item()->getPriority() << " vs current priority:" << kernel->currentThread->getPriority() << endl;
+				
+                if (iter->GetCurrent()->next == NULL) break;
+				iter->Next();
+                // if (iter->Item()->getArrivalTime() < smallest->getArrivalTime()) smallest = iter->Item();
+            }
+            if (!iter->IsDone())
+            {
+                Thread *t = iter->Item(); // Backup
+                readyList->Remove(iter->Item());
+                cout << "Remove Item and Prepend: " << t->getName() << endl;
+                return t;
+            }
+            else
+            {
+                cout << "404" << endl;
+	                return NULL;
+            }
+		}
         else
         {
             return readyList->Front();
