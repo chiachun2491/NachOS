@@ -36,7 +36,7 @@ ThreadedKernel::ThreadedKernel(int argc, char **argv)
 	    i++;
         } else if (strcmp(argv[i], "-u") == 0) {
             cout << "Partial usage: nachos [-rs randomSeed]\n";
-	} else if(strcmp(argv[i], "RR") == 0) {
+	    } else if(strcmp(argv[i], "RR") == 0) {
             type = RR;
         } else if (strcmp(argv[i], "FCFS") == 0) {
             type = FIFO;
@@ -44,6 +44,8 @@ ThreadedKernel::ThreadedKernel(int argc, char **argv)
             type = Priority;
         } else if (strcmp(argv[i], "SJF") == 0) {
             type = SJF;
+        } else if (strcmp(argv[i], "SRTF") == 0) {
+            type = SRTF;
         }
     }
 }
@@ -118,18 +120,19 @@ ThreadedKernel::SelfTest() {
    
    LibSelfTest();		// test library routines
    
+    
    currentThread->SelfTest();	// test thread switching
    
    				// test semaphore operation
-   semaphore = new Semaphore("test", 0);
-   semaphore->SelfTest();
-   delete semaphore;
-   
-   				// test locks, condition variables
-				// using synchronized lists
-   synchList = new SynchList<int>;
-   synchList->SelfTest(9);
-   delete synchList;
+   // semaphore = new Semaphore("test", 0);
+   // semaphore->SelfTest();
+   // delete semaphore;
+   // 
+   // 				// test locks, condition variables
+   //  			// using synchronized lists
+   // synchList = new SynchList<int>;
+   // synchList->SelfTest(9);
+   // delete synchList;
 
-   ElevatorSelfTest();
+   // ElevatorSelfTest();
 }
