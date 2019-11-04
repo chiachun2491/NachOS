@@ -276,8 +276,16 @@ Thread::Sleep (bool finishing)
     DEBUG(dbgThread, "Sleeping thread: " << name);
 
     status = BLOCKED;
-    while ((nextThread = kernel->scheduler->GetNextToRun(true)) == NULL)
-	kernel->interrupt->Idle();	// no one to run, wait for an interrupt
+    if (kernel->scheduler->getSchedulerType() == SRTF)
+    {
+        while ((nextThread = kernel->scheduler->GetNextToRun(true)) == NULL)
+	    kernel->interrupt->Idle();	// no one to run, wait for an interrupt
+    }
+    else
+    {
+        while ((nextThread = kernel->scheduler->FindNextToRun()) == NULL)
+	    kernel->interrupt->Idle();	// no one to run, wait for an interrupt
+    }
     
     // returns when it's time for us to run
     cout << "next run is " << nextThread->getName() << endl;

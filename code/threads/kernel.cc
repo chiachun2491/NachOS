@@ -36,7 +36,7 @@ ThreadedKernel::ThreadedKernel(int argc, char **argv)
 	    i++;
         } else if (strcmp(argv[i], "-u") == 0) {
             cout << "Partial usage: nachos [-rs randomSeed]\n";
-	} else if(strcmp(argv[i], "RR") == 0) {
+	    } else if(strcmp(argv[i], "RR") == 0) {
             type = RR;
         } else if (strcmp(argv[i], "FCFS") == 0) {
             type = FIFO;
