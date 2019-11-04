@@ -123,29 +123,11 @@ Scheduler::ReadyToRun (Thread *thread)
 // 	Return the next thread to be scheduled onto the CPU.
 //	If there are no ready threads, return NULL.
 // Side effect:
-//	Thread is removed from the ready list.
+//	According to the scheduler type, Thread is removed from the ready list.
 //----------------------------------------------------------------------
 
 Thread *
-Scheduler::FindNextToRun ()
-{
-    ASSERT(kernel->interrupt->getLevel() == IntOff);
-
-    if (readyList->IsEmpty()) {
-	return NULL;
-    } else {
-    	return readyList->RemoveFront();
-    }
-}
-
-//----------------------------------------------------------------------
-// Scheduler::GetNextToRun
-// 	Return the next thread to be scheduled onto the CPU.
-//	If there are no ready threads, return NULL.
-//----------------------------------------------------------------------
-
-Thread *
-Scheduler::GetNextToRun (bool advance)
+Scheduler::FindNextToRun (bool advance)
 {
     ASSERT(kernel->interrupt->getLevel() == IntOff);
 
@@ -153,50 +135,58 @@ Scheduler::GetNextToRun (bool advance)
     {
 	    return NULL;
     } 
-    else 
-    {
-        if (kernel->scheduler->getSchedulerType() == SRTF)
-        {
-            ListIterator<Thread *> *iter = new ListIterator<Thread *>(readyList);
-            // iter->Next();
-            cout << "GetNextTORun:" <<iter->Item()->getName() << endl;
-            Thread * smallest = iter->Item();
 
-            while (iter->Item()->getArrivalTime() > Thread::currentTime)
+    if (kernel->scheduler->getSchedulerType() == SRTF)
+    {
+        ListIterator<Thread *> *iter = new ListIterator<Thread *>(readyList);
+        Thread * smallest = iter->Item();
+
+        DEBUG(dbgThread, "SRTF Estimate FindNextToRun: " << smallest->getName());
+
+        while (iter->Item()->getArrivalTime() > Thread::currentTime)
+        {
+            DEBUG(dbgThread, "Estimated Error: ");
+            DEBUG(dbgThread, "\tCompare Arrival Time Failed: " 
+                            << smallest->getName() << " :" << iter->Item()->getArrivalTime() 
+                            << " vs Current Time:" << Thread::currentTime);
+
+            iter->Next();
+
+            if (iter->IsDone()) break;
+            if (iter->Item()->getArrivalTime() < smallest->getArrivalTime()) 
             {
-                cout << "Compare Arrival Time Thread :" << iter->Item()->getName() << " arrival at time:" << iter->Item()->getArrivalTime() << " vs time:" << Thread::currentTime << endl;
-                iter->Next();
-                if (iter->IsDone()) break;
-                if (iter->Item()->getArrivalTime() < smallest->getArrivalTime()) smallest = iter->Item();
+                smallest = iter->Item();
+                DEBUG(dbgThread, "\tAgain Estimate FindNextToRun: " << smallest->getName());
             }
-            if (!iter->IsDone())
-            {
-                Thread *t = iter->Item(); // Backup
-                readyList->Remove(iter->Item());
-                cout << "Remove Item and Prepend: " << t->getName() << endl;
-                return t;
-            }
-            else
-            {
-                cout << "404" << endl;
-                if (advance)
-                {
-                    cout << "-----------------Time:" << Thread::currentTime << "----------------"<< endl;
-                    Thread::currentTime = smallest->getArrivalTime();
-                    readyList->Remove(smallest);
-                    return smallest;
-                }
-                else
-                {
-                    return NULL;
-                }
-            }
-            
+        }
+        if (!iter->IsDone())
+        {
+            Thread *t = iter->Item(); // Backup
+            readyList->Remove(iter->Item());
+            DEBUG(dbgThread, "Remove from readyList and return: " << t->getName());
+            return t;
         }
         else
         {
-            return readyList->Front();
+            if (advance)
+            {
+                DEBUG(dbgThread, "Advance ON: Fast Forward Time to " << smallest->getArrivalTime());
+                // cout << "-----------------Time:" << Thread::currentTime << "----------------"<< endl;
+                Thread::currentTime = smallest->getArrivalTime();
+                readyList->Remove(smallest);
+                DEBUG(dbgThread, "Remove from readyList and return: " << smallest->getName());
+                return smallest;
+            }
+            else
+            {
+                DEBUG(dbgThread, "Not Found any Thread and return NULL.");
+                return NULL;
+            }
         }
+    }
+    else
+    {
+    	return readyList->RemoveFront();
     }
 }
 
