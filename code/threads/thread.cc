@@ -210,36 +210,33 @@ Thread::Yield ()
     
     DEBUG(dbgThread, "Yielding thread: " << name);
 
-    if (kernel->scheduler->getSchedulerType() == SRTF)
+    nextThread = kernel->scheduler->FindNextToRun(false);
+
+    if (nextThread != NULL)
     {
-        nextThread = kernel->scheduler->GetNextToRun(false);
-        // while (nextThread->getArrivalTime() > Thread::currentTime)
-        // {
-        //     nextThread = nextThread->next;
-        // }
-        if (nextThread != NULL) 
-	    {
+        if (kernel->scheduler->getSchedulerType() == SRTF)
+        {
             if (this->getBurstTime() < nextThread->getBurstTime())
             {
+                DEBUG(dbgThread, "Priority of Next thread is low: " << nextThread->name);
+                DEBUG(dbgThread, "Put back to readyList");
 			    kernel->scheduler->ReadyToRun(nextThread);                               
                 nextThread = this;
             }
             if (nextThread != this) 
             {
-                // IF !SRTF
-                // nextThread = kernel->scheduler->FindNextToRun();
+                DEBUG(dbgThread, "Priority of Next thread is high: " << nextThread->name);
+                DEBUG(dbgThread, "Run and Put " << this->name << " back to readyList");
 			    kernel->scheduler->ReadyToRun(this);                               
 			    kernel->scheduler->Run(nextThread, FALSE);
             }
         }
-    }
-    else 
-    {
-        nextThread = kernel->scheduler->FindNextToRun();
-        if (nextThread != NULL) {
-	        kernel->scheduler->ReadyToRun(this);
+        else
+        {
+            kernel->scheduler->ReadyToRun(this);
 	        kernel->scheduler->Run(nextThread, FALSE);
         }
+        
     }
 
     (void) kernel->interrupt->SetLevel(oldLevel);
@@ -276,17 +273,10 @@ Thread::Sleep (bool finishing)
     DEBUG(dbgThread, "Sleeping thread: " << name);
 
     status = BLOCKED;
-    if (kernel->scheduler->getSchedulerType() == SRTF)
-    {
-        while ((nextThread = kernel->scheduler->GetNextToRun(true)) == NULL)
-	    kernel->interrupt->Idle();	// no one to run, wait for an interrupt
-    }
-    else
-    {
-        while ((nextThread = kernel->scheduler->FindNextToRun()) == NULL)
-	    kernel->interrupt->Idle();	// no one to run, wait for an interrupt
-    }
-    
+
+    while ((nextThread = kernel->scheduler->FindNextToRun(true)) == NULL)
+	kernel->interrupt->Idle();	// no one to run, wait for an interrupt
+
     // returns when it's time for us to run
     cout << "next run is " << nextThread->getName() << endl;
     kernel->scheduler->Run(nextThread, finishing); 
