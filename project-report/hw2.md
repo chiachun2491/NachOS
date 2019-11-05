@@ -157,6 +157,7 @@ int FIFOCompare(Thread *a, Thread *b) {
 
 #### Screenshot
 如下圖所示，`test1` 全部執行完成後 `test2` 才執行。
+
 ![FCFS](https://i.imgur.com/yc3Dz10.png)
 
 #### 最短工作優先排程 (Shortest-Job-First, SJF)
@@ -189,6 +190,7 @@ void Thread::SelfTest() {
 ```
 #### Screenshot
 如下圖所示，5 個模擬 thread 正確執行。
+
 ![SJF](https://imgur.com/WPJovH2.png)
 
 
@@ -234,6 +236,7 @@ void Thread::SelfTest() {
 
 #### Screenshot
 如下圖所示，3 個模擬 thread 正確執行。
+
 ![SRTF](https://imgur.com/O5iNy3W.png)
 
 ---
@@ -276,7 +279,7 @@ static void SimpleThread() {
 
     1. 由於 SRTF 與 SJF 我們都有實作考慮`arrivalTime`，故需要與其他排程分開
     
-    3. 宣告 `smallest` 作為預估傳回的 nextThread
+    3. 宣告 `smallest` 作為預估傳回的 `nextThread`
 
 
     5. 因為我們 `readyList` 是依照 burstTime 排序，因此我們要判斷從 `readyList` 從頭開始是否有 thread 已經到達，並且可以 preempt，若 `readyList` 中第一個 thread 尚未到達，我們必須要往後檢查是否有 burstTime 較大但已經到達的 thread 可以執行，如果有找到，將 `smallest` 替換成該 thread，若都沒有找到則離開 while 迴圈
