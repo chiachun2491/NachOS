@@ -210,36 +210,33 @@ Thread::Yield ()
     
     DEBUG(dbgThread, "Yielding thread: " << name);
 
-    if (kernel->scheduler->getSchedulerType() == SRTF)
+    nextThread = kernel->scheduler->FindNextToRun(false);
+
+    if (nextThread != NULL)
     {
-        nextThread = kernel->scheduler->GetNextToRun(false);
-        // while (nextThread->getArrivalTime() > Thread::currentTime)
-        // {
-        //     nextThread = nextThread->next;
-        // }
-        if (nextThread != NULL) 
-	    {
-            if (this->getBurstTime() < nextThread->getBurstTime())
+        if (kernel->scheduler->getSchedulerType() == SRTF)
+        {
+            if (this->getBurstTime() <= nextThread->getBurstTime())
             {
+                DEBUG(dbgThread, "Priority of Next thread is low: " << nextThread->name);
+                DEBUG(dbgThread, "Put back to readyList");
 			    kernel->scheduler->ReadyToRun(nextThread);                               
                 nextThread = this;
             }
             if (nextThread != this) 
             {
-                // IF !SRTF
-                // nextThread = kernel->scheduler->FindNextToRun();
+                DEBUG(dbgThread, "Priority of Next thread is high: " << nextThread->name);
+                DEBUG(dbgThread, "Run and Put " << this->name << " back to readyList");
 			    kernel->scheduler->ReadyToRun(this);                               
 			    kernel->scheduler->Run(nextThread, FALSE);
             }
         }
-    }
-    else 
-    {
-        nextThread = kernel->scheduler->FindNextToRun();
-        if (nextThread != NULL) {
-	        kernel->scheduler->ReadyToRun(this);
+        else
+        {
+            kernel->scheduler->ReadyToRun(this);
 	        kernel->scheduler->Run(nextThread, FALSE);
         }
+        
     }
 
     (void) kernel->interrupt->SetLevel(oldLevel);
@@ -276,19 +273,12 @@ Thread::Sleep (bool finishing)
     DEBUG(dbgThread, "Sleeping thread: " << name);
 
     status = BLOCKED;
-    if (kernel->scheduler->getSchedulerType() == SRTF)
-    {
-        while ((nextThread = kernel->scheduler->GetNextToRun(true)) == NULL)
-	    kernel->interrupt->Idle();	// no one to run, wait for an interrupt
-    }
-    else
-    {
-        while ((nextThread = kernel->scheduler->FindNextToRun()) == NULL)
-	    kernel->interrupt->Idle();	// no one to run, wait for an interrupt
-    }
-    
+
+    while ((nextThread = kernel->scheduler->FindNextToRun(true)) == NULL)
+	kernel->interrupt->Idle();	// no one to run, wait for an interrupt
+
     // returns when it's time for us to run
-    cout << "next run is " << nextThread->getName() << endl;
+    DEBUG (dbgThread, "next run is " << nextThread->getName() << endl);
     kernel->scheduler->Run(nextThread, finishing); 
 }
 
@@ -450,8 +440,8 @@ SimpleThread()
 {
     Thread *thread = kernel->currentThread;
     while (thread->getBurstTime() > 0) {
-        cout << "-----------------Time:" << Thread::currentTime << "----------------"<< endl;
-        cout << "Execute SimpleThread " << thread->getName() << endl;
+        DEBUG (dbgThread, "-----------------Time:" << Thread::currentTime << "----------------"<< endl);
+        DEBUG (dbgThread, "Execute SimpleThread " << thread->getName() << endl);
         thread->setBurstTime(thread->getBurstTime() - 1);
         Thread::currentTime++;
     	printf("%s: %d\n", kernel->currentThread->getName(), kernel->currentThread->getBurstTime());
@@ -478,11 +468,11 @@ Thread::SelfTest()
 {
     DEBUG(dbgThread, "Entering Thread::SelfTest");
     
-    const int number 	 = 3;
-    char *name[number] 	 = {"A", "B", "C"};
-    int burst[number] 	 = {1, 5, 1};
+    const int number 	 = 5;
+    char *name[number] 	 = {"A", "B", "C", "D", "E"};
+    int burst[number] 	 = {1, 2, 3, 2, 1};
     int priority[number] = {4, 5, 3};
-    int arrival[number] = {0, 1, 3};
+    int arrival[number] = {0, 1, 2, 3, 4};
 
     Thread *t;
     for (int i = 0; i < number; i ++) {
@@ -492,7 +482,7 @@ Thread::SelfTest()
         t->setArrivalTime(arrival[i]);
         t->Fork((VoidFunctionPtr) SimpleThread, (void *)NULL);
     }
-    kernel->scheduler->Print();
+	
     // kernel->currentThread->Yield();
 }
 
