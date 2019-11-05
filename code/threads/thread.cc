@@ -216,7 +216,7 @@ Thread::Yield ()
     {
         if (kernel->scheduler->getSchedulerType() == SRTF)
         {
-            if (this->getBurstTime() < nextThread->getBurstTime())
+            if (this->getBurstTime() <= nextThread->getBurstTime())
             {
                 DEBUG(dbgThread, "Priority of Next thread is low: " << nextThread->name);
                 DEBUG(dbgThread, "Put back to readyList");
@@ -468,11 +468,11 @@ Thread::SelfTest()
 {
     DEBUG(dbgThread, "Entering Thread::SelfTest");
     
-    const int number 	 = 3;
-    char *name[number] 	 = {"A", "B", "C"};
-    int burst[number] 	 = {1, 5, 1};
+    const int number 	 = 5;
+    char *name[number] 	 = {"A", "B", "C", "D", "E"};
+    int burst[number] 	 = {1, 2, 3, 2, 1};
     int priority[number] = {4, 5, 3};
-    int arrival[number] = {0, 1, 3};
+    int arrival[number] = {0, 1, 2, 3, 4};
 
     Thread *t;
     for (int i = 0; i < number; i ++) {
