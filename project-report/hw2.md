@@ -2,9 +2,9 @@
 
 ## Work division
 
-+ `TODO` B10615013 李聿鎧
-+ `TODO` B10615024 李韋宗
-+ `TODO` B10615043 何嘉峻
++ `MultiProgramming & FIFO` B10615013 李聿鎧
++ `SJF & SRTF Scheduling` B10615024 李韋宗
++ `SJF & SRTF Scheduling` B10615043 何嘉峻
 ---
 ## Source Code
 Github: https://github.com/chiachun2491/NachOS.git
@@ -12,29 +12,28 @@ Github: https://github.com/chiachun2491/NachOS.git
 ---
 ## Report
 ### 1. Multi-Programming
-1.  在`userporg/addrspace.h`新增變數，紀錄Physical page使用狀況
+1.  在 `userporg/addrspace.h` 新增變數，紀錄 Physical page 使用狀況
 ```cpp
-【userporg/addrspace.h】
+// userporg/addrspace.h
 
 class AddrSpace {
   public:
     // record used state of the main memory page
     static bool usedPhyPage[NumPhysPages];	
-    /* 略 */
+    /* ... */
 };
 ```
-2. 在`usrprog/addrspace.cc`將Physical page初始化為0
+2. 在 `usrprog/addrspace.cc` 將 Physical page 初始化為 0
 ```cpp
-【usrprog/addrspace.cc】
+// usrprog/addrspace.cc
 
-#include /* 略 */
 // initial usedPhyPage to zero
 bool AddrSpace::usedPhyPage[NumPhysPages] = {0};
 ```
 
-3. 使用完Page後，必須要釋放資源
+3. 使用完 Page 後，必須要釋放資源
 ```cpp
-【usrprog/addrspace.cc】
+// usrprog/addrspace.cc
 
 //---------------------------------------------------------------------
 // AddrSpace::~AddrSpace
@@ -49,14 +48,14 @@ AddrSpace::~AddrSpace()
 ```
 
 4. 程序運行時，我們就依順序找一個可用記憶體位置給它。
-並要更改讀取Code以及Data的位置
+並要更改讀取 Code 以及 Data 的位置
 ```cpp
-【usrprog/addrspace.cc】
+// usrprog/addrspace.cc
 
 bool 
 AddrSpace::Load(char *fileName) 
 {
-    /* 略 */
+    /* ... */
    // create pageTable and record usedPhyPage
     pageTable = new TranslationEntry[numPages];
     for(unsigned int i = 0, j = 0; i < numPages; i++) {
@@ -70,7 +69,7 @@ AddrSpace::Load(char *fileName)
         pageTable[i].dirty = false;
         pageTable[i].readOnly = false;
     }
-    /* 略 */
+    /* ... */
     if (noffH.code.size > 0) {
         DEBUG(dbgAddr, "Initializing code segment.");
 	DEBUG(dbgAddr, noffH.code.virtualAddr << ", " << noffH.code.size);
@@ -87,19 +86,22 @@ AddrSpace::Load(char *fileName)
 		&(kernel->machine->mainMemory[pageTable[noffH.initData.virtualAddr/PageSize].physicalPage * PageSize + (noffH.code.virtualAddr%PageSize)]),
 			noffH.initData.size, noffH.initData.inFileAddr);
     }
-    /* 略 */
+    /* ... */
 }
 ```
 #### Screenshot
-如下圖所示，`test1`及`test2`同時運行不會互相影響。
+如下圖所示，`test1` 及 `test2` 同時運行不會互相影響。
 ![MP](https://i.imgur.com/1AejwVP.png)
 
 ---
-### 2. CPU Scheduler.
-1. 從command中記錄各種排程
+### 2. CPU Scheduler
+1. 從 command 中記錄各種排程
 ```cpp
-ThreadedKernel::ThreadedKernel(int argc, char **argv) {
-        /* in for lopp */
+// threads/kernel.cc
+
+ThreadedKernel::ThreadedKernel(int argc, char **argv) 
+{
+        /* ... */
         else if(strcmp(argv[i], "-RR") == 0) {
             type = RR;
         } else if (strcmp(argv[i], "-FCFS") == 0) {
@@ -114,9 +116,9 @@ ThreadedKernel::ThreadedKernel(int argc, char **argv) {
 }
 ```
 
-2. 幫每種排程建立不同的SortedList，並給予不同的Compare Function
+2. 幫每種排程建立不同的 SortedList，並給予不同的 Compare Function
 ```cpp
-【threads/addrspace.cc】
+// threads/addrspace.cc
 
 Scheduler::Scheduler(SchedulerType type)
 {
@@ -146,7 +148,7 @@ Scheduler::Scheduler(SchedulerType type)
 
 #### 先進先出排程 (First-Come-First-Service, FCFS)
 ```cpp
-【threads/scheduler.cc】
+// threads/scheduler.cc
 
 int FIFOCompare(Thread *a, Thread *b) {
     return 1;
@@ -154,13 +156,13 @@ int FIFOCompare(Thread *a, Thread *b) {
 ```
 
 #### Screenshot
-如下圖所示，`test1`全部執行完成後`test2`才執行。
+如下圖所示，`test1` 全部執行完成後 `test2` 才執行。
 ![FCFS](https://i.imgur.com/yc3Dz10.png)
 
 #### 最短工作優先排程 (Shortest-Job-First, SJF)
-我們優先考慮`burstTime`，接著才考慮`arrivalTime`。
+我們優先考慮 `burstTime`，接著才考慮 `arrivalTime`。
 ```cpp
-【threads/scheduler.cc】
+// threads/scheduler.cc
 
 int SJFCompare(Thread *a, Thread *b) {
     if(a->getBurstTime() == b->getBurstTime())
@@ -172,82 +174,90 @@ int SJFCompare(Thread *a, Thread *b) {
     return a->getBurstTime() > b->getBurstTime() ? 1 : -1;
 }
 ```
-模擬排成如下
+測試排程如下
 ```cpp
-【threads/thread.cc】
+// threads/thread.cc
 
 void Thread::SelfTest() {
-    const int number 	 = 5;
-    char *name[number] 	 = {"A", "B", "C", "D", "E"};
-    int burst[number] 	 = {1, 2, 3, 2, 1};
+    const int number = 5;
+    char *name[number] = {"A", "B", "C", "D", "E"};
+    int burst[number] = {1, 2, 3, 2, 1};
     int priority[number] = {4, 5, 3, 1, 2};
     int arrival[number] = {0, 1, 2, 3, 4};
-    /* 略 */
+    /* ... */
 }
 ```
 #### Screenshot
-如下圖所示，5個模擬thread正確執行。
+如下圖所示，5 個模擬 thread 正確執行。
 ![SJF](https://imgur.com/WPJovH2.png)
 
 
 #### 最短剩餘時間排程 (shortest remaining time first ,SRTF)
-因為演算法相似，我們使用SJF的compare function。
+因為與 SJF 差別在於 preemptive，我們直接延用 `SJFCompare`。
 ```cpp
-【threads/scheduler.cc】
+// threads/scheduler.cc
 
 int SRTFCompare(Thread *a, Thread *b) {
     return SJFCompare(a, b);
 }
 ```
 
-在`CallBack`中新增SRTF為可以被preempt的一種排成。
+在`CallBack`中新增 SRTF 為可以被 preempt 的一種排程。
 
 ```cpp
-【threads/alarm.cc】
+// threads/alarm.cc
+
 void Alarm::CallBack() {
-    /* 略 */
+    /* ... */
     if(kernel->scheduler->getSchedulerType() == RR ||
-            kernel->scheduler->getSchedulerType() == Priority ||
-            kernel->scheduler->getSchedulerType() == SRTF) {
-		interrupt->YieldOnReturn();
-	}
+        kernel->scheduler->getSchedulerType() == Priority ||
+        kernel->scheduler->getSchedulerType() == SRTF) 
+        {
+            interrupt->YieldOnReturn();
+        }
 }
 ```
 
-模擬排成如下
+模擬排程如下
 ```cpp
+// threads/thread.cc
+
 void Thread::SelfTest() {
     const int number 	 = 3;
     char *name[number] 	 = {"A", "B", "C"};
     int burst[number] 	 = {1, 5, 1};
     int priority[number] = {4, 5, 3};
     int arrival[number] = {0, 1, 3};
-    /* 略 */
+    /* ... */
 }
 ```
 
 #### Screenshot
-如下圖所示，3個模擬thread正確執行。
+如下圖所示，3 個模擬 thread 正確執行。
 ![SRTF](https://imgur.com/O5iNy3W.png)
 
 ---
-### 3. SRTF與SJF的詳細實作方法
-1. 在thread.h中加入模擬時間
+### 3. SRTF 與SJF 的詳細實作方法
+1. 在 `thread.h` 中加入 `static` 變數 `currentTime` 並初始為 0
 ```cpp
-【threads/thread.h】
+// threads/thread.cc
 
-static int currentTime;
+//----------------------------------------------------------------------
+// Thread::currentTime
+// 	Set for SJF & SRTF Scheduler to determine thread is arrival or not.
+//----------------------------------------------------------------------
+
+int
+Thread::currentTime = 0;
 ```
 
-2. 修改SRTF排成執行`Yield`而非`OneTick`，為了每次都檢查是否有優先權更高的thread可以執行
+2. 在 SRTF 排程中，為了要每次都檢查是否有優先權更高的 thread 可以執行，因此改為直接呼叫 `Yield()` 而非 `OneTick()`
 ```cpp
-【threads/thread.cc】
-
-int Thread::currentTime = 0;
+// threads/thread.cc
 
 static void SimpleThread() {
     while(thread->getBurstTime() > 0) {
-    /* 略 */
+    /* ... */
     Thread::currentTime++;
         if (kernel->scheduler->getSchedulerType() == SRTF) {
             {
@@ -262,9 +272,25 @@ static void SimpleThread() {
 }
 ```
 
-3. 修改`FindNextToRun`
+3. 修改 `FindNextToRun`
+
+    1. 由於 SRTF 與 SJF 我們都有實作考慮`arrivalTime`，故需要與其他排程分開
+    
+    3. 宣告 `smallest` 作為預估傳回的 nextThread
+
+
+    5. 因為我們 `readyList` 是依照 burstTime 排序，因此我們要判斷從 `readyList` 從頭開始是否有 thread 已經到達，並且可以 preempt，若 `readyList` 中第一個 thread 尚未到達，我們必須要往後檢查是否有 burstTime 較大但已經到達的 thread 可以執行，如果有找到，將 `smallest` 替換成該 thread，若都沒有找到則離開 while 迴圈
+
+
+    7. 如果有找到 thread 就從`readyList`中移除並回傳
+
+
+    9. 沒有找到且不需要`advance`才回傳 `NULL`；需要`advance`時，將 `Thread::currentTime` 設定為 `smallest.arrivalTime`，並且從 `readyList` 中移除並回傳
+
+
+    11. 非 SJF 與 SRTF 的其他排成方法沿用原本的回傳方式
 ```cpp
-【threads/scheduler.cc】
+// threads/scheduler.cc
 
 Thread * Scheduler::FindNextToRun (bool advance)
 {
@@ -274,22 +300,17 @@ Thread * Scheduler::FindNextToRun (bool advance)
     {
 	    return NULL;
     } 
-```
-
-* 由於SRTF與SJF我們都有實作考慮`arrivalTime`，故需要與其他排成分開
-```cpp
-	if (kernel->scheduler->getSchedulerType() == SRTF || kernel->scheduler->getSchedulerType() == SJF)
+    
+    // Note 1 ↓
+    if (kernel->scheduler->getSchedulerType() == SRTF || kernel->scheduler->getSchedulerType() == SJF)
     {
         ListIterator<Thread *> *iter = new ListIterator<Thread *>(readyList);
+        // Note 2 ↓
         Thread * smallest = iter->Item();
 
         DEBUG(dbgThread, "SRTF Estimate FindNextToRun: " << smallest->getName());
-```
-
-* 在`readyList`中尋找已經到達且優先權最高的thread 
-
-`/* todo 我不確定底下的if是要怎麼解釋 */`
-```cpp
+        
+        // Note 3 ↓
         while (iter->Item()->getArrivalTime() > Thread::currentTime)
         {
             DEBUG(dbgThread, "Estimated Error: ");
@@ -306,10 +327,8 @@ Thread * Scheduler::FindNextToRun (bool advance)
                 DEBUG(dbgThread, "\tAgain Estimate FindNextToRun: " << smallest->getName());
             }
         }
-```
-
-* 如果找到優先權更高的Thread就將他回傳並從`readyList`中移除
-```cpp
+        
+        // Note 4 ↓
         if (!iter->IsDone())
         {
             Thread *t = iter->Item(); // Backup
@@ -317,10 +336,8 @@ Thread * Scheduler::FindNextToRun (bool advance)
             DEBUG(dbgThread, "Remove from readyList and return: " << t->getName());
             return t;
         }
-```
-
-* 若沒有找到且不需要`advance`才回傳NULL；需要`advance`時，將`currentTime`設定為最近要到達的Thread的`arrivalTime`，並且將其回傳並從`readyList`中移除
-```cpp
+        
+        // Note 5 ↓
         else
         {
             if (advance)
@@ -339,10 +356,8 @@ Thread * Scheduler::FindNextToRun (bool advance)
             }
         }
     }
-```
-
-* 非SJF與SRTF的其他排成方法沿用原本的回傳方式
-```cpp
+    
+    // Note 6 ↓
     else
     {
     	return readyList->RemoveFront();
@@ -350,9 +365,23 @@ Thread * Scheduler::FindNextToRun (bool advance)
 }
 ```
 
-4. 修改`Yield`
+4. 修改 `Yield()`
+    1. 會呼叫 `Yield()` 是每次 `SimpleThread()` 進行 `currentThread.burstTime -1`，表示 `currentThread` 仍在運行，我們只需檢查有無 thread 可以 preempt 或接著做，因此在 `FindNextToRun()` `advance`須傳入 `false`
 
+
+    3. 因為在 SRTF 中，傳回的 `nextThread` 有可能 burstTime 還是比 `currentThread` 的大，因此需要判斷是否要做 context switch
+
+
+    5. 若 `currentThread` 的 `burstTime` 比 `FindNextToRun` 中找到的還小，則不進行 context switch
+
+
+    7. 若需要 context switch 的話，我們須將 `currentThread` 丟回 `readyList`，並改成 run `nextThread`
+
+
+    9. 非 SRTF 的其他排成方法沿用原本的執行方式
 ```cpp
+// threads/scheduler.cc
+
 void
 Thread::Yield ()
 {
@@ -362,30 +391,24 @@ Thread::Yield ()
     ASSERT(this == kernel->currentThread);
     
     DEBUG(dbgThread, "Yielding thread: " << name);
-```
-
-* Thread只是暫時停下，故`advance`須傳入false
-```cpp
+    
+    // Note 1 ↓
     nextThread = kernel->scheduler->FindNextToRun(false);
-```
 
-* 只有SRTF會須要使用`Yield`判斷preempt所以只需要判別他
-* 若目前Thread的`burstTime`比`FindNextToRun`中找到的還小，則不發生context switch
-```cpp
     if (nextThread != NULL)
     {
         if (kernel->scheduler->getSchedulerType() == SRTF)
         {
+            // Note 2, 3 ↓
             if (this->getBurstTime() <= nextThread->getBurstTime())
             {
                 DEBUG(dbgThread, "Priority of Next thread is low: " << nextThread->name);
                 DEBUG(dbgThread, "Put back to readyList");
-			    kernel->scheduler->ReadyToRun(nextThread);                               
+                kernel->scheduler->ReadyToRun(nextThread);                               
                 nextThread = this;
             }
-```
-* 若上面的判斷皆執行完發現`nextThread`並非目前的Thread，代表發生preempt須要執行context switch
-```cpp
+
+            // Note 4 ↓
             if (nextThread != this) 
             {
                 DEBUG(dbgThread, "Priority of Next thread is high: " << nextThread->name);
@@ -394,30 +417,33 @@ Thread::Yield ()
 			    kernel->scheduler->Run(nextThread, FALSE);
             }
         }
-```
-* 非SRTF的其他排成方法沿用原本的執行方式
-```cpp
+        
+        // Note 5 ↓
         else
         {
             kernel->scheduler->ReadyToRun(this);
-	        kernel->scheduler->Run(nextThread, FALSE);
+	    kernel->scheduler->Run(nextThread, FALSE);
         }
-        
     }
 
     (void) kernel->interrupt->SetLevel(oldLevel);
 }
 ```
 
-5. 修改`Sleep`
-* 一個Thread執行完畢後，為避免Nachos進入`Idle`而自行關閉，故將`advance`設為ture超前判斷`readyList`中的Thread的可執行狀況
+5. 修改 `Sleep`
+
+* 一個 Thread 執行完畢後中間有 Idle 情況發生，為避免 NachOS 進入`Idle()` 而**自行關閉**，則在呼叫檢查 `FindNextToRun` 時將`advance` 設為 `ture`，讓 `Thread::currentTime` 加速到 `arrivalTime` 最接近 `currentTime` 的 `nextThread`
 ```cpp
-【threads/thread.cc】
+// threads/thread.cc
 
 void Thread::Sleep (bool finishing) {
-    /* 略 */
+    /* ... */
     while ((nextThread = kernel->scheduler->FindNextToRun(true)) == NULL)
 	kernel->interrupt->Idle();	// no one to run, wait for an interrupt
-    /* 略 */
+    /* ... */
 }
 ```
+
+
+---
+###### tags: `NachOS`
