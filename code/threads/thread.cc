@@ -488,7 +488,7 @@ Thread::SelfTest()
 
 //----------------------------------------------------------------------
 // Thread::currentTime
-// 	Set for SRTF Scheduler to determine thread is arrival or not.
+// 	Set for SJF & SRTF Scheduler to determine thread is arrival or not.
 //----------------------------------------------------------------------
 
 int
