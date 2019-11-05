@@ -278,7 +278,7 @@ Thread::Sleep (bool finishing)
 	kernel->interrupt->Idle();	// no one to run, wait for an interrupt
 
     // returns when it's time for us to run
-    cout << "next run is " << nextThread->getName() << endl;
+    DEBUG (dbgThread, "next run is " << nextThread->getName() << endl)7;
     kernel->scheduler->Run(nextThread, finishing); 
 }
 
@@ -440,8 +440,8 @@ SimpleThread()
 {
     Thread *thread = kernel->currentThread;
     while (thread->getBurstTime() > 0) {
-        cout << "-----------------Time:" << Thread::currentTime << "----------------"<< endl;
-        cout << "Execute SimpleThread " << thread->getName() << endl;
+        DEBUG (dbgThread, "-----------------Time:" << Thread::currentTime << "----------------"<< endl);
+        DEBUG (dbgThread, "Execute SimpleThread " << thread->getName() << endl);
         thread->setBurstTime(thread->getBurstTime() - 1);
         Thread::currentTime++;
     	printf("%s: %d\n", kernel->currentThread->getName(), kernel->currentThread->getBurstTime());
@@ -482,7 +482,7 @@ Thread::SelfTest()
         t->setArrivalTime(arrival[i]);
         t->Fork((VoidFunctionPtr) SimpleThread, (void *)NULL);
     }
-    kernel->scheduler->Print();
+	
     // kernel->currentThread->Yield();
 }
 
