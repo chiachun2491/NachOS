@@ -89,6 +89,9 @@ ExceptionHandler(ExceptionType which)
  		    break;
 	    }
 	    break;
+	case PageFaultException:
+		cerr << "Page Fault Occur!!" << endl;
+		break;
 	default:
 	    cerr << "Unexpected user mode exception" << which << "\n";
 	    break;

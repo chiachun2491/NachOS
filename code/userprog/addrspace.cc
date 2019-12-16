@@ -206,7 +206,8 @@ AddrSpace::Load(char *fileName)
 void 
 AddrSpace::Execute(char *fileName) 
 {
-    // TODO pt_is_load
+    pt_is_load = false;
+
     if (!Load(fileName)) {
 	cout << "inside !Load(FileName)" << endl;
 	return;				// executable not found
@@ -216,6 +217,8 @@ AddrSpace::Execute(char *fileName)
     this->InitRegisters();		// set the initial register values
     this->RestoreState();		// load page table register
 
+    pt_is_load = true;
+    
     kernel->machine->Run();		// jump to the user progam
 
     ASSERTNOTREACHED();			// machine->Run never returns;
@@ -267,8 +270,10 @@ AddrSpace::InitRegisters()
 
 void AddrSpace::SaveState() 
 {
+    if (pt_is_load) {
         pageTable=kernel->machine->pageTable;
         numPages=kernel->machine->pageTableSize;
+    }
 }
 
 //----------------------------------------------------------------------
