@@ -23,7 +23,8 @@
 
 // initial usedPhyPage to zero
 bool AddrSpace::usedPhyPage[NumPhysPages] = {0};
-
+bool AddrSpace::usedVirPage[NumPhysPages] = {0};  // record used state of the virtual memory page
+TranslationEntry *AddrSpace::mainTable[NumPhysPages] = {NULL}; 
 
 //----------------------------------------------------------------------
 // SwapHeader
@@ -167,7 +168,7 @@ AddrSpace::Load(char *fileName)
             // else -> virtual memory (Disk)
             else {
                 char *buf = new char[PageSize];
-                while(kernel->machine->usedVirPage[k] != false)
+                while(AddrSpace::usedVirPage[k] != false)
                     k++;
                 
                 pageTable[i].virtualPage = k;
