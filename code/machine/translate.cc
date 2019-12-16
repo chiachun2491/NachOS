@@ -189,7 +189,7 @@ Machine::Translate(int virtAddr, int* physAddr, int size, bool writing)
     TranslationEntry *entry;
     unsigned int pageFrame;
 	int target; 	// target page to swap out
-	int fifo; 	// for fifo
+	// int fifo; 	// for fifo
 
     DEBUG(dbgAddr, "\tTranslate " << virtAddr << (writing ? " , write" : " , read"));
 
@@ -219,7 +219,7 @@ Machine::Translate(int virtAddr, int* physAddr, int size, bool writing)
 		kernel->stats->numPageFaults++;
 
 		int j = 0;
-		while(AddrSpace::usedPhyPage[j] = true && j < NumPhysPages) {
+		while(AddrSpace::usedPhyPage[j] == true && j < NumPhysPages) {
 			j++;
 		}
 		
@@ -238,8 +238,7 @@ Machine::Translate(int virtAddr, int* physAddr, int size, bool writing)
 			char *buf_1 = new char[PageSize];
 			char *buf_2 = new char[PageSize];
 
-			
-			target = fifo%32;
+			target = AddrSpace::fifo % 32;
 
 			cout << "Number = " << target << "page swap out." << endl;
 
@@ -255,7 +254,7 @@ Machine::Translate(int virtAddr, int* physAddr, int size, bool writing)
 			pageTable[vpn].valid = true;
 			pageTable[vpn].physicalPage = target;
 			AddrSpace::mainTable[target] = &pageTable[vpn];
-			fifo++;
+			AddrSpace::fifo++;
 
 			cout << "Page replacement finished" << endl;
 		}
