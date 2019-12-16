@@ -189,7 +189,7 @@ Machine::Translate(int virtAddr, int* physAddr, int size, bool writing)
     TranslationEntry *entry;
     unsigned int pageFrame;
 	int target; 	// target page to swap out
-	int fifo = 0; 	// for fifo
+	int fifo; 	// for fifo
 
     DEBUG(dbgAddr, "\tTranslate " << virtAddr << (writing ? " , write" : " , read"));
 
@@ -219,14 +219,14 @@ Machine::Translate(int virtAddr, int* physAddr, int size, bool writing)
 		kernel->stats->numPageFaults++;
 
 		int j = 0;
-		while(kernel->Addrspace->usedPhyPage[j] = true && j < NumPhysPages) {
+		while(AddrSpace::usedPhyPage[j] = true && j < NumPhysPages) {
 			j++;
 		}
 		
 		if (j < NumPhysPages) {
 			char *buf = new char[PageSize]; // Save temp Page
-			kernel->Addrspace->usedPhyPage[j] = true;
-			kernel->machine->mainTable[j] = &pageTable[vpn];
+			AddrSpace::usedPhyPage[j] = true;
+			AddrSpace::mainTable[j] = &pageTable[vpn];
 
 			pageTable[vpn].physicalPage = j;
 			pageTable[vpn].valid = true;
@@ -246,15 +246,15 @@ Machine::Translate(int virtAddr, int* physAddr, int size, bool writing)
 			bcopy(&mainMemory[target * PageSize], buf_1, PageSize);
 			kernel->virtualMem_disk->ReadSector(pageTable[vpn].virtualPage, buf_2);
 			bcopy(buf_2, &mainMemory[target * PageSize], PageSize);
-			kernel->virtualMem_disk->ReadSector(pageTable[vpn].virtualPage, buf_1);
+			kernel->virtualMem_disk->WriteSector(pageTable[vpn].virtualPage, buf_1);
 			
-			mainTable[target].virtualPage = pageTable[vpn].virtualPage;
-			mainTable[target].valid = false;
-
+			AddrSpace::mainTable[target]->virtualPage = pageTable[vpn].virtualPage;
+			AddrSpace::mainTable[target]->valid = false;
+			
 			// save
 			pageTable[vpn].valid = true;
 			pageTable[vpn].physicalPage = target;
-			mainTable[target] = &pageTable[vpn];
+			AddrSpace::mainTable[target] = &pageTable[vpn];
 			fifo++;
 
 			cout << "Page replacement finished" << endl;

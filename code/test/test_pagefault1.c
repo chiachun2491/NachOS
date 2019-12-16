@@ -3,14 +3,12 @@
 int main()
 {
     int i;
-    int size = 100;
-    int arr[size];
-    arr[0] = 0;
+    int arr[20];
     PrintInt(1);
-    for( i=1 ; i<size ; ++i )
+    for( i=1 ; i<20 ; ++i )
     {
         arr[i] = arr[i-1] + 1;
-        // PrintInt(i);
+        PrintInt(arr[i]);
     }
 
     // PrintInt(arr[size-1]);
