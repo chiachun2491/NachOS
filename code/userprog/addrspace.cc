@@ -128,45 +128,66 @@ AddrSpace::Load(char *fileName)
     numPages = divRoundUp(size, PageSize);
 //	cout << "number of pages of " << fileName<< " is "<<numPages<<endl;
 
-   // create pageTable and record usedPhyPage
+   // create pageTable
     pageTable = new TranslationEntry[numPages];
-    for(unsigned int i = 0, j = 0; i < numPages; i++) {
-        pageTable[i].virtualPage = i;
-        while(j < NumPhysPages && AddrSpace::usedPhyPage[j] == true)
-            j++;
-        AddrSpace::usedPhyPage[j] = true;
-        pageTable[i].physicalPage = j;
-        pageTable[i].valid = true;
-        pageTable[i].use = false;
-        pageTable[i].dirty = false;
-        pageTable[i].readOnly = false;
-    }
 
     size = numPages * PageSize;
 
-    ASSERT(numPages <= NumPhysPages);		// check we're not trying
-						// to run anything too big --
-						// at least until we have
-						// virtual memory
+    // ASSERT(numPages <= NumPhysPages);		// check we're not trying
+	// 					// to run anything too big --
+	// 					// at least until we have
+	// 					// virtual memory
 
     DEBUG(dbgAddr, "Initializing address space: " << numPages << ", " << size);
 
 // then, copy in the code and data segments into memory
 	if (noffH.code.size > 0) {
         DEBUG(dbgAddr, "Initializing code segment.");
-	DEBUG(dbgAddr, noffH.code.virtualAddr << ", " << noffH.code.size);
-	// read memory address in pageTable	
-        executable->ReadAt(
-		&(kernel->machine->mainMemory[pageTable[noffH.code.virtualAddr/PageSize].physicalPage * PageSize + (noffH.code.virtualAddr%PageSize)]), 
-			noffH.code.size, noffH.code.inFileAddr);
+	    DEBUG(dbgAddr, noffH.code.virtualAddr << ", " << noffH.code.size);
+
+        for(unsigned int i = 0, j = 0, k = 0 ; i < numPages; i++) {
+            pageTable[i].virtualPage = i;
+            while(j < NumPhysPages && AddrSpace::usedPhyPage[j] == true)
+                j++;
+
+            // if memory is enough -> main memory
+            if (j < NumPhysPages) {
+                AddrSpace::usedPhyPage[j] = true;
+                AddrSpace::mainTable[j] = &pageTable[i];
+                pageTable[i].physicalPage = j;
+                pageTable[i].valid = true;
+                pageTable[i].use = false;
+                pageTable[i].dirty = false;
+                pageTable[i].readOnly = false;
+
+                // read memory address in pageTable	
+                executable->ReadAt(&(kernel->machine->mainMemory[j * PageSize]), 
+                    PageSize, noffH.code.inFileAddr + (i * PageSize));
+            }
+            // else -> virtual memory (Disk)
+            else {
+                char *buf = new char[PageSize];
+                while(kernel->machine->usedVirPage[k] != false)
+                    k++;
+                
+                pageTable[i].virtualPage = k;
+                pageTable[i].valid = false;
+                pageTable[i].use = false;
+                pageTable[i].dirty = false;
+                pageTable[i].readOnly = false;
+                
+                // read memory address in pageTable	
+                executable->ReadAt(buf, PageSize, noffH.code.inFileAddr + (i * PageSize));
+                kernel->virtualMem_disk->WriteSector(k, buf);
+            }
+        }
     }
 	if (noffH.initData.size > 0) {
         DEBUG(dbgAddr, "Initializing data segment.");
-	DEBUG(dbgAddr, noffH.initData.virtualAddr << ", " << noffH.initData.size);
-	// read memory address in pageTable 
-        executable->ReadAt(
-		&(kernel->machine->mainMemory[pageTable[noffH.initData.virtualAddr/PageSize].physicalPage * PageSize + (noffH.code.virtualAddr%PageSize)]),
-			noffH.initData.size, noffH.initData.inFileAddr);
+	    DEBUG(dbgAddr, noffH.initData.virtualAddr << ", " << noffH.initData.size);
+	    // read memory address in pageTable 
+        executable->ReadAt(&(kernel->machine->mainMemory[noffH.initData.virtualAddr]),
+            noffH.initData.size, noffH.initData.inFileAddr);
     }
 
     delete executable;			// close file
@@ -184,6 +205,7 @@ AddrSpace::Load(char *fileName)
 void 
 AddrSpace::Execute(char *fileName) 
 {
+    // TODO pt_is_load
     if (!Load(fileName)) {
 	cout << "inside !Load(FileName)" << endl;
 	return;				// executable not found
