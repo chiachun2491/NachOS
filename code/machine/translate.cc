@@ -230,6 +230,7 @@ Machine::Translate(int virtAddr, int* physAddr, int size, bool writing)
 
 			pageTable[vpn].physicalPage = j;
 			pageTable[vpn].valid = true;
+			pageTable[vpn].count++;
 
 			kernel->virtualMem_disk->ReadSector(pageTable[vpn].virtualPage, buf);
 			bcopy(buf, &mainMemory[j * PageSize], PageSize);
@@ -238,7 +239,19 @@ Machine::Translate(int virtAddr, int* physAddr, int size, bool writing)
 			char *buf_1 = new char[PageSize];
 			char *buf_2 = new char[PageSize];
 
-			target = AddrSpace::fifo % 32;
+			// FIFO
+			// target = AddrSpace::fifo % NumPhysPages;
+
+			// LRU
+			int min = pageTable[0].count;
+			target = 0;
+			for (int i = 0; i < NumPhysPages; i++) {
+				if (min > pageTable[i].count) {
+					min = pageTable[i].count;
+					target = i;
+				}
+			}
+			pageTable[target].count++;
 
 			cout << "Number = " << target << "page swap out." << endl;
 
@@ -249,6 +262,7 @@ Machine::Translate(int virtAddr, int* physAddr, int size, bool writing)
 			
 			AddrSpace::mainTable[target]->virtualPage = pageTable[vpn].virtualPage;
 			AddrSpace::mainTable[target]->valid = false;
+			
 			
 			// save
 			pageTable[vpn].valid = true;
