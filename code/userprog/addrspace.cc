@@ -90,7 +90,7 @@ AddrSpace::AddrSpace()
 AddrSpace::~AddrSpace()
 {
    for(int i = 0; i < numPages; i++)
-        AddrSpace::usedPhyPage[pageTable[i].physicalPage] = false;
+        kernel->machine->usedPhyPage[pageTable[i].physicalPage] = false;
    delete pageTable;
 }
 
@@ -148,13 +148,13 @@ AddrSpace::Load(char *fileName)
 	    // read memory address in pageTable	
         for(unsigned int i = 0, j = 0, k = 0 ; i < numPages; i++) {
             pageTable[i].virtualPage = i;
-            while(j < NumPhysPages && AddrSpace::usedPhyPage[j] == true)
+            while(j < NumPhysPages && kernel->machine->usedPhyPage[j] == true)
                 j++;
 
             // if memory is enough -> main memory
             if (j < NumPhysPages) {
-                AddrSpace::usedPhyPage[j] = true;
-                AddrSpace::mainTable[j] = &pageTable[i];
+                kernel->machine->usedPhyPage[j] = true;
+                kernel->machine->mainTable[j] = &pageTable[i];
                 pageTable[i].physicalPage = j;
                 pageTable[i].valid = true;
                 pageTable[i].use = false;
@@ -168,7 +168,7 @@ AddrSpace::Load(char *fileName)
             // else -> virtual memory (Disk)
             else {
                 char *buf = new char[PageSize];
-                while(AddrSpace::usedVirPage[k] != false)
+                while(kernel->machine->usedVirPage[k] != false)
                     k++;
 
                 pageTable[i].virtualPage = k;

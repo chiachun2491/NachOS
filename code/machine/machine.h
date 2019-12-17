@@ -132,6 +132,10 @@ class Machine {
     TranslationEntry *pageTable;
     unsigned int pageTableSize;
     bool ReadMem(int addr, int size, int* value);
+	bool usedPhyPage[NumPhysPages];	// record used state of the main memory page
+    bool usedVirPage[NumPhysPages];  // record used state of the virtual memory page
+    TranslationEntry *mainTable[NumPhysPages]; 
+
   private:
 
 // Routines internal to the machine simulation -- DO NOT call these directly
