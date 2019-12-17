@@ -44,7 +44,7 @@ UserProgKernel::UserProgKernel(int argc, char **argv)
 		cout << "	./nachos -e file1 -e file2 : executing file1 and file2."  << endl;
 	}
 	// Replacement Algorithm set
-	else if (strcmp(argv[i], "-rp") == 0) {
+	else if (strcmp(argv[i], "-RP") == 0) {
 		
 		if (strcmp(argv[i+1], "FIFO") == 0) {
 			kernel->machine->replacementType = Replace_FIFO;
