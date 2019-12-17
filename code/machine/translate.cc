@@ -248,8 +248,8 @@ Machine::Translate(int virtAddr, int* physAddr, int size, bool writing)
 			bcopy(buf_2, &mainMemory[target * PageSize], PageSize);
 			kernel->virtualMem_disk->WriteSector(pageTable[vpn].virtualPage, buf_1);
 
-			AddrSpace::mainTable[target].virtualPage = pageTable[vpn].virtualPage;
-			AddrSpace::mainTable[target].valid = false;
+			AddrSpace::mainTable[target]->virtualPage = pageTable[vpn].virtualPage;
+			AddrSpace::mainTable[target]->valid = false;
 
 			// save
 			pageTable[vpn].valid = true;
