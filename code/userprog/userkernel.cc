@@ -55,6 +55,9 @@ UserProgKernel::UserProgKernel(int argc, char **argv)
 			kernel->machine->replacementType = Replace_LRU;
 			cout << "Replacement Algorithm set LRU." << endl;
 		}
+		else {
+			cout << "hello?" << endl;
+		}
 	}
     }
 }
