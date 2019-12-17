@@ -43,6 +43,18 @@ UserProgKernel::UserProgKernel(int argc, char **argv)
 		cout << "	./nachos -s : Print machine status during the machine is on." << endl;
 		cout << "	./nachos -e file1 -e file2 : executing file1 and file2."  << endl;
 	}
+	// Replacement Algorithm set
+	else if (strcmp(argv[i], "-r") == 0) {
+		if (strcmp(argv[i+1], "FIFO") == 0) {
+			kernel->machine->replacementType = Replace_FIFO;
+			cout << "Replacement Algorithm set FIFO." << endl;
+		}
+			
+		else if (strcmp(argv[i+1], "LRU") == 0) {
+			kernel->machine->replacementType = Replace_LRU;
+			cout << "Replacement Algorithm set LRU." << endl;
+		}
+	}
     }
 }
 

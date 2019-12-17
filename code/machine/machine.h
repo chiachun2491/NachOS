@@ -50,6 +50,11 @@ enum ExceptionType { NoException,           // Everything ok!
 		     NumExceptionTypes
 };
 
+enum ReplacementType { 
+	Replace_FIFO,
+	Replace_LRU
+};
+
 // User program CPU state.  The full set of MIPS registers, plus a few
 // more because we need to be able to start/stop a user program between
 // any two instructions (thus we need to keep track of things like load
@@ -135,7 +140,7 @@ class Machine {
 	bool usedPhyPage[NumPhysPages];	// record used state of the main memory page
     bool usedVirPage[NumPhysPages];  // record used state of the virtual memory page
     TranslationEntry *mainTable[NumPhysPages]; 
-
+	int replacementType; 	// record use replacement algorithm
   private:
 
 // Routines internal to the machine simulation -- DO NOT call these directly
