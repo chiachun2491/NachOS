@@ -47,12 +47,12 @@ UserProgKernel::UserProgKernel(int argc, char **argv)
 	else if (strcmp(argv[i], "-RP") == 0) {
 		
 		if (strcmp(argv[i+1], "FIFO") == 0) {
-			kernel->machine->replacementType = Replace_FIFO;
+			replacementType = Replace_FIFO;
 			cout << "Replacement Algorithm set FIFO." << endl;
 		}
 			
 		else if (strcmp(argv[i+1], "LRU") == 0) {
-			kernel->machine->replacementType = Replace_LRU;
+			replacementType = Replace_LRU;
 			cout << "Replacement Algorithm set LRU." << endl;
 		}
 		else {
@@ -73,6 +73,7 @@ UserProgKernel::Initialize()
     ThreadedKernel::Initialize();	// init multithreading
 
     machine = new Machine(debugUserProg);
+	machine->replacementType = this->replacementType;
     fileSystem = new FileSystem();
 	// Virtual Memory
 	virtualMem_disk = new SynchDisk("New Disk");

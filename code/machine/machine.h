@@ -50,10 +50,6 @@ enum ExceptionType { NoException,           // Everything ok!
 		     NumExceptionTypes
 };
 
-enum ReplacementType { 
-	Replace_FIFO,
-	Replace_LRU
-};
 
 // User program CPU state.  The full set of MIPS registers, plus a few
 // more because we need to be able to start/stop a user program between

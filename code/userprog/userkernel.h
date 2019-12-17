@@ -12,6 +12,11 @@
 #ifndef USERKERNEL_H  
 #define USERKERNEL_H
 
+enum ReplacementType { 
+  Replace_FIFO,
+	Replace_LRU
+};
+
 #include "kernel.h"
 #include "filesys.h"
 #include "machine.h"
@@ -44,6 +49,7 @@ class UserProgKernel : public ThreadedKernel {
 	Thread* t[10];
 	char*	execfile[10];
 	int	execfileNum;
+  int replacementType; // record replacement algortihm
 };
 
 #endif //USERKERNEL_H
