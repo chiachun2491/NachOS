@@ -60,7 +60,7 @@ UserProgKernel::Initialize()
     fileSystem = new FileSystem();
 
 	// Virtual Memory
-	virtualMem_disk = new SynchDisk("New Disk");
+	virtualMem_disk = new SynchDisk("For Virtual Memory");
 #ifdef FILESYS
     synchDisk = new SynchDisk("New SynchDisk");
 #endif // FILESYS

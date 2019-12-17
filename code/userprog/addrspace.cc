@@ -21,10 +21,6 @@
 #include "machine.h"
 #include "noff.h"
 
-// initial usedPhyPage to zero
-bool AddrSpace::usedPhyPage[NumPhysPages] = {0};
-bool AddrSpace::usedVirPage[NumPhysPages] = {0};  // record used state of the virtual memory page
-TranslationEntry *AddrSpace::mainTable[NumPhysPages] = {NULL}; 
 int AddrSpace::fifo = 0;   
 
 //----------------------------------------------------------------------
@@ -149,13 +145,13 @@ AddrSpace::Load(char *fileName)
 
         for(unsigned int i = 0, j = 0, k = 0 ; i < numPages; i++) {
             pageTable[i].virtualPage = i;
-            while(j < NumPhysPages && AddrSpace::usedPhyPage[j] == true)
+            while(j < NumPhysPages && kernel->machine->usedPhyPage[j] == true)
                 j++;
 
             // if memory is enough -> main memory
             if (j < NumPhysPages) {
-                AddrSpace::usedPhyPage[j] = true;
-                AddrSpace::mainTable[j] = &pageTable[i];
+                kernel->machine->usedPhyPage[j] = true;
+                kernel->machine->mainTable[j] = &pageTable[i];
                 pageTable[i].physicalPage = j;
                 pageTable[i].valid = true;
                 pageTable[i].use = false;
@@ -169,7 +165,7 @@ AddrSpace::Load(char *fileName)
             // else -> virtual memory (Disk)
             else {
                 char *buf = new char[PageSize];
-                while(AddrSpace::usedVirPage[k] != false)
+                while(kernel->machine->usedVirPage[k] != false)
                     k++;
                 
                 pageTable[i].virtualPage = k;
