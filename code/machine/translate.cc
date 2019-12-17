@@ -215,66 +215,66 @@ Machine::Translate(int virtAddr, int* physAddr, int size, bool writing)
 	    return AddressErrorException;
 	} else if (!pageTable[vpn].valid) {
 	    DEBUG(dbgAddr, "Invalid virtual page # " << virtAddr);
-	    // return PageFaultException;
-		kernel->stats->numPageFaults++;
+	    return PageFaultException;
+		// kernel->stats->numPageFaults++;
 
-		int j = 0;
-		while(kernel->machine->usedPhyPage[j] == true && j < NumPhysPages) {
-			j++;
-		}
+		// int j = 0;
+		// while(kernel->machine->usedPhyPage[j] == true && j < NumPhysPages) {
+		// 	j++;
+		// }
 
-		if (j < NumPhysPages) {
-			char *buf = new char[PageSize]; // Save temp Page
-			kernel->machine->usedPhyPage[j] = true;
-			kernel->machine->mainTable[j] = &pageTable[vpn];
+		// if (j < NumPhysPages) {
+		// 	char *buf = new char[PageSize]; // Save temp Page
+		// 	kernel->machine->usedPhyPage[j] = true;
+		// 	kernel->machine->mainTable[j] = &pageTable[vpn];
 
-			pageTable[vpn].physicalPage = j;
-			pageTable[vpn].valid = true;
-			pageTable[vpn].count++;
+		// 	pageTable[vpn].physicalPage = j;
+		// 	pageTable[vpn].valid = true;
+		// 	pageTable[vpn].count++;
 
-			kernel->virtualMem_disk->ReadSector(pageTable[vpn].virtualPage, buf);
-			bcopy(buf, &mainMemory[j * PageSize], PageSize);
-		}
-		else {
-			char *buf_1 = new char[PageSize];
-			char *buf_2 = new char[PageSize];
+		// 	kernel->virtualMem_disk->ReadSector(pageTable[vpn].virtualPage, buf);
+		// 	bcopy(buf, &mainMemory[j * PageSize], PageSize);
+		// }
+		// else {
+		// 	char *buf_1 = new char[PageSize];
+		// 	char *buf_2 = new char[PageSize];
 
 
-			if (kernel->machine->replacementType == Replace_FIFO) {
-				target = kernel->machine->fifo % NumPhysPages;
-			}
-			else if (kernel->machine->replacementType == Replace_LRU) {
-				int min = pageTable[0].count;
-				target = 0;
-				for (int i = 0; i < NumPhysPages; i++) {
-					if (min > pageTable[i].count) {
-						min = pageTable[i].count;
-						target = i;
-					}
-				}
-				pageTable[target].count++;
-			}
-			else {
-				target = kernel->machine->fifo % NumPhysPages;
-			}
+		// 	if (kernel->machine->replacementType == Replace_FIFO) {
+		// 		target = kernel->machine->fifo % NumPhysPages;
+		// 	}
+		// 	else if (kernel->machine->replacementType == Replace_LRU) {
+		// 		int min = pageTable[0].count;
+		// 		target = 0;
+		// 		for (int i = 0; i < NumPhysPages; i++) {
+		// 			if (min > pageTable[i].count) {
+		// 				min = pageTable[i].count;
+		// 				target = i;
+		// 			}
+		// 		}
+		// 		pageTable[target].count++;
+		// 	}
+		// 	else {
+		// 		target = kernel->machine->fifo % NumPhysPages;
+		// 	}
 
-			cout << "Number = " << target << "page swap out." << endl;
+		// 	cout << "Number = " << target << "page swap out." << endl;
 
-			bcopy(&mainMemory[target * PageSize], buf_1, PageSize);
-			kernel->virtualMem_disk->ReadSector(pageTable[vpn].virtualPage, buf_2);
-			bcopy(buf_2, &mainMemory[target * PageSize], PageSize);
-			kernel->virtualMem_disk->WriteSector(pageTable[vpn].virtualPage, buf_1);
+		// 	bcopy(&mainMemory[target * PageSize], buf_1, PageSize);
+		// 	kernel->virtualMem_disk->ReadSector(pageTable[vpn].virtualPage, buf_2);
+		// 	bcopy(buf_2, &mainMemory[target * PageSize], PageSize);
+		// 	kernel->virtualMem_disk->WriteSector(pageTable[vpn].virtualPage, buf_1);
 
-			kernel->machine->mainTable[target]->virtualPage = pageTable[vpn].virtualPage;
-			kernel->machine->mainTable[target]->valid = false;
+		// 	kernel->machine->mainTable[target]->virtualPage = pageTable[vpn].virtualPage;
+		// 	kernel->machine->mainTable[target]->valid = false;
 
-			// save
-			pageTable[vpn].valid = true;
-			pageTable[vpn].physicalPage = target;
-			kernel->machine->mainTable[target] = &pageTable[vpn];
-			kernel->machine->fifo++;
+		// 	// save
+		// 	pageTable[vpn].valid = true;
+		// 	pageTable[vpn].physicalPage = target;
+		// 	kernel->machine->mainTable[target] = &pageTable[vpn];
+		// 	kernel->machine->fifo++;
 
-			cout << "Page replacement finished" << endl;
+		// 	cout << "Page replacement finished" << endl;
 		}
 	}
 	entry = &pageTable[vpn];
