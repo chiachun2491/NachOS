@@ -107,11 +107,11 @@ void ExceptionHandler(ExceptionType which)
 			kernel->machine->usedPhyPage[j] = true;
 			kernel->machine->mainTable[j] = &pageTable[vpn];
 
-			pageTable[vpn].physicalPage = j;
-			pageTable[vpn].valid = true;
-			pageTable[vpn].count++;
+			kernel->machine->pageTable[vpn].physicalPage = j;
+			kernel->machine->pageTable[vpn].valid = true;
+			kernel->machine->pageTable[vpn].count++;
 
-			kernel->virtualMem_disk->ReadSector(pageTable[vpn].virtualPage, buf);
+			kernel->virtualMem_disk->ReadSector(kernel->machine->pageTable[vpn].virtualPage, buf);
 			bcopy(buf, &mainMemory[j * PageSize], PageSize);
 		}
 		else
@@ -125,17 +125,17 @@ void ExceptionHandler(ExceptionType which)
 			}
 			else if (kernel->machine->replacementType == Replace_LRU)
 			{
-				int min = pageTable[0].count;
+				int min = kernel->machine->pageTable[0].count;
 				target = 0;
 				for (int i = 0; i < NumPhysPages; i++)
 				{
-					if (min > pageTable[i].count)
+					if (min > kernel->machine->pageTable[i].count)
 					{
-						min = pageTable[i].count;
+						min = kernel->machine->pageTable[i].count;
 						target = i;
 					}
 				}
-				pageTable[target].count++;
+				kernel->machine->pageTable[target].count++;
 			}
 			else
 			{
@@ -145,17 +145,17 @@ void ExceptionHandler(ExceptionType which)
 			cout << "Number = " << target << "page swap out." << endl;
 
 			bcopy(&mainMemory[target * PageSize], buf_1, PageSize);
-			kernel->virtualMem_disk->ReadSector(pageTable[vpn].virtualPage, buf_2);
+			kernel->virtualMem_disk->ReadSector(kernel->machine->pageTable[vpn].virtualPage, buf_2);
 			bcopy(buf_2, &mainMemory[target * PageSize], PageSize);
-			kernel->virtualMem_disk->WriteSector(pageTable[vpn].virtualPage, buf_1);
+			kernel->virtualMem_disk->WriteSector(kernel->machine->pageTable[vpn].virtualPage, buf_1);
 
-			kernel->machine->mainTable[target]->virtualPage = pageTable[vpn].virtualPage;
+			kernel->machine->mainTable[target]->virtualPage = kernel->machine->pageTable[vpn].virtualPage;
 			kernel->machine->mainTable[target]->valid = false;
 
 			// save
-			pageTable[vpn].valid = true;
-			pageTable[vpn].physicalPage = target;
-			kernel->machine->mainTable[target] = &pageTable[vpn];
+			kernel->machine->pageTable[vpn].valid = true;
+			kernel->machine->pageTable[vpn].physicalPage = target;
+			kernel->machine->mainTable[target] = &kernel->machine->pageTable[vpn];
 			kernel->machine->fifo++;
 
 			cout << "Page replacement finished" << endl;
