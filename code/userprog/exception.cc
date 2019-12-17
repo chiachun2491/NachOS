@@ -52,8 +52,8 @@ void ExceptionHandler(ExceptionType which)
 {
 	int type = kernel->machine->ReadRegister(2);
 	int val;
-	int target; 	// target page to swap out
-    unsigned int vpn, offset;
+	int target; // target page to swap out
+	unsigned int vpn, offset;
 	int j;
 
 	switch (which)
@@ -98,7 +98,7 @@ void ExceptionHandler(ExceptionType which)
 	case PageFaultException:
 		kernel->stats->numPageFaults++;
 
-		j=0;
+		j = 0;
 		while (kernel->machine->usedPhyPage[j] == true && j < NumPhysPages)
 		{
 			j++;
@@ -162,11 +162,12 @@ void ExceptionHandler(ExceptionType which)
 			kernel->machine->fifo++;
 
 			cout << "Page replacement finished" << endl;
-			break;
 		}
-		default:
-			cerr << "Unexpected user mode exception" << which << "\n";
-			break;
-		}
-		ASSERTNOTREACHED();
+		break;
+	default:
+		cerr << "Unexpected user mode exception" << which << "\n";
+		break;
 	}
+
+	ASSERTNOTREACHED();
+}
