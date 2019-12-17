@@ -275,7 +275,7 @@ Machine::Translate(int virtAddr, int* physAddr, int size, bool writing)
 		// 	kernel->machine->fifo++;
 
 		// 	cout << "Page replacement finished" << endl;
-		}
+		// }
 	}
 	entry = &pageTable[vpn];
     } else {
