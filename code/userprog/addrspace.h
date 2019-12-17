@@ -30,6 +30,8 @@ class AddrSpace {
     void SaveState();			// Save/restore address space-specific
     void RestoreState();		// info on a context switch 
     static bool usedPhyPage[NumPhysPages];	// record used state of the main memory page
+    static bool usedVirPage[NumPhysPages];  // record used state of the virtual memory page
+    static TranslationEntry *mainTable[NumPhysPages];
 
   private:
     TranslationEntry *pageTable;	// Assume linear page table translation
@@ -42,6 +44,7 @@ class AddrSpace {
 
     void InitRegisters();		// Initialize user-level CPU registers,
 					// before jumping to user code
+    bool pt_is_load;
 
 };
 

@@ -32,6 +32,8 @@ class UserProgKernel : public ThreadedKernel {
 // These are public for notational convenience.
     Machine *machine;
     FileSystem *fileSystem;
+    SynchDisk *virtualMem_disk;
+
 
 #ifdef FILESYS
     SynchDisk *synchDisk;
