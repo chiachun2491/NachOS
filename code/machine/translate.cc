@@ -240,18 +240,25 @@ Machine::Translate(int virtAddr, int* physAddr, int size, bool writing)
 			char *buf_2 = new char[PageSize];
 
 			// FIFO
-			// target = AddrSpace::fifo % NumPhysPages;
-
-			// LRU
-			int min = pageTable[0].count;
-			target = 0;
-			for (int i = 0; i < NumPhysPages; i++) {
-				if (min > pageTable[i].count) {
-					min = pageTable[i].count;
-					target = i;
-				}
+			if (kernel->machine->replacementType == Replace_FIFO) {
+				target = AddrSpace::fifo % NumPhysPages;
 			}
-			pageTable[target].count++;
+			// LRU
+			else if (kernel->machine->replacementType == Replace_LRU) {
+				int min = pageTable[0].count;
+				target = 0;
+				for (int i = 0; i < NumPhysPages; i++) {
+					if (min > pageTable[i].count) {
+						min = pageTable[i].count;
+						target = i;
+					}
+				}
+				pageTable[target].count++;
+			}
+			// avoid didn't set FIFO/LRU -> default FIFO
+			else {
+				target = AddrSpace::fifo % NumPhysPages;
+			}
 
 			cout << "Number = " << target << "page swap out." << endl;
 
