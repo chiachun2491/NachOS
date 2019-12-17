@@ -42,6 +42,8 @@ class UserProgKernel : public ThreadedKernel {
 
   private:
     bool debugUserProg;		// single step user program // TODO
+    ReplacementType replacementType; // record replacement algortihm
+
 	Thread* t[10];
 	char*	execfile[10];
 	int	execfileNum;

@@ -30,7 +30,7 @@
 const unsigned int PageSize = 128; 		// set the page size equal to
 					// the disk sector size, for simplicity
 
-const unsigned int NumPhysPages = 32;
+const unsigned int NumPhysPages = 64;	// 32 is too small
 const int MemorySize = (NumPhysPages * PageSize);
 const int TLBSize = 4;			// if there is a TLB, make it small
 
@@ -48,6 +48,11 @@ enum ExceptionType { NoException,           // Everything ok!
 		     IllegalInstrException, // Unimplemented or reserved instr.
 		     
 		     NumExceptionTypes
+};
+
+enum ReplacementType { 
+  	Replace_FIFO,
+	Replace_LRU
 };
 
 // User program CPU state.  The full set of MIPS registers, plus a few
@@ -132,6 +137,7 @@ class Machine {
     TranslationEntry *pageTable;
     unsigned int pageTableSize;
     bool ReadMem(int addr, int size, int* value);
+	ReplacementType replacementType;
   private:
 
 // Routines internal to the machine simulation -- DO NOT call these directly

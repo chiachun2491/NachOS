@@ -25,6 +25,7 @@
 bool AddrSpace::usedPhyPage[NumPhysPages] = {0};
 bool AddrSpace::usedVirPage[NumPhysPages] = {0};  // record used state of the virtual memory page
 TranslationEntry *AddrSpace::mainTable[NumPhysPages] = {NULL}; 
+int AddrSpace::fifo = 0;   
 
 //----------------------------------------------------------------------
 // SwapHeader
@@ -89,8 +90,10 @@ AddrSpace::AddrSpace()
 
 AddrSpace::~AddrSpace()
 {
-   for(int i = 0; i < numPages; i++)
+   for(int i = 0; i < numPages; i++) {
         AddrSpace::usedPhyPage[pageTable[i].physicalPage] = false;
+        AddrSpace::usedVirPage[pageTable[i].virtualPage] = false;
+    }
    delete pageTable;
 }
 
