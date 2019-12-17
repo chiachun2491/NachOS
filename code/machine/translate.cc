@@ -219,7 +219,7 @@ Machine::Translate(int virtAddr, int* physAddr, int size, bool writing)
 		kernel->stats->numPageFaults++;
 
 		int j = 0;
-		while(Addrspace::usedPhyPage[j] == true && j < NumPhysPages) {
+		while(AddrSpace::usedPhyPage[j] == true && j < NumPhysPages) {
 			j++;
 		}
 
