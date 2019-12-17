@@ -43,6 +43,21 @@ UserProgKernel::UserProgKernel(int argc, char **argv)
 		cout << "	./nachos -s : Print machine status during the machine is on." << endl;
 		cout << "	./nachos -e file1 -e file2 : executing file1 and file2."  << endl;
 	}
+	else if (strcmp(argv[i], "-RP") == 0) {
+ 		
+ 		if (strcmp(argv[i+1], "FIFO") == 0) {
+			replacementType = Replace_FIFO;
+ 			cout << "Replacement Algorithm set FIFO." << endl;
+ 		}
+ 			
+ 		else if (strcmp(argv[i+1], "LRU") == 0) {
+			replacementType = Replace_LRU;
+ 			cout << "Replacement Algorithm set LRU." << endl;
+ 		}
+ 		else {
+			cout << "Wrong Replacement Algorithm Setting, now using FIFO." << endl;
+		}
+
     }
 }
 
@@ -57,6 +72,7 @@ UserProgKernel::Initialize()
     ThreadedKernel::Initialize();	// init multithreading
 
     machine = new Machine(debugUserProg);
+	machine->replacementType = this->replacementType;
     fileSystem = new FileSystem();
 
 	// Virtual Memory
