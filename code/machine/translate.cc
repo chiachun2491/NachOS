@@ -241,7 +241,7 @@ Machine::Translate(int virtAddr, int* physAddr, int size, bool writing)
 
 
 			if (kernel->machine->replacementType == Replace_FIFO) {
-				target = AddrSpace::fifo % NumPhysPages;
+				target = kernel->machine->fifo % NumPhysPages;
 			}
 			else if (kernel->machine->replacementType == Replace_LRU) {
 				int min = pageTable[0].count;
@@ -255,7 +255,7 @@ Machine::Translate(int virtAddr, int* physAddr, int size, bool writing)
 				pageTable[target].count++;
 			}
 			else {
-				target = AddrSpace::fifo % NumPhysPages;
+				target = kernel->machine->fifo % NumPhysPages;
 			}
 
 			cout << "Number = " << target << "page swap out." << endl;
@@ -272,7 +272,7 @@ Machine::Translate(int virtAddr, int* physAddr, int size, bool writing)
 			pageTable[vpn].valid = true;
 			pageTable[vpn].physicalPage = target;
 			kernel->machine->mainTable[target] = &pageTable[vpn];
-			AddrSpace::fifo++;
+			kernel->machine->fifo++;
 
 			cout << "Page replacement finished" << endl;
 		}

@@ -55,6 +55,7 @@ void CheckEndian()
 Machine::Machine(bool debug)
 {
     replacementType = Replace_FIFO;
+    fifo = 0;
     int i;
 
     for (i = 0; i < NumTotalRegs; i++)

@@ -137,6 +137,7 @@ class Machine {
     bool usedVirPage[NumPhysPages];  // record used state of the virtual memory page
     TranslationEntry *mainTable[NumPhysPages]; 
 	int replacementType; 	// record use replacement algorithm
+	int fifo;  // for FIFO replacement
   private:
 
 // Routines internal to the machine simulation -- DO NOT call these directly
