@@ -21,10 +21,10 @@
 #include "machine.h"
 #include "noff.h"
 
-// initial usedPhyPage to zero
-bool AddrSpace::usedPhyPage[NumPhysPages] = {0};
-bool AddrSpace::usedVirPage[NumPhysPages] = {0};  // record used state of the virtual memory page
-TranslationEntry *AddrSpace::mainTable[NumPhysPages] = {NULL};
+// // initial usedPhyPage to zero
+// bool AddrSpace::usedPhyPage[NumPhysPages] = {0};
+// bool AddrSpace::usedVirPage[NumPhysPages] = {0};  // record used state of the virtual memory page
+// TranslationEntry *AddrSpace::mainTable[NumPhysPages] = {NULL};
 
 //----------------------------------------------------------------------
 // SwapHeader
