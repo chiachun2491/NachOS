@@ -19,7 +19,7 @@ int main()
         
     }
 
-    // PrintInt(arr[size-1]);
+    PrintInt(arr[size-1]);
 
     return 0;
 }
