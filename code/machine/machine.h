@@ -135,7 +135,7 @@ class Machine {
     unsigned int pageTableSize;
     bool ReadMem(int addr, int size, int* value);
 	bool usedPhyPage[NumPhysPages];	// record used state of the main memory page
-    bool usedVirPage[NumVirtPages];  // record used state of the virtual memory page
+    bool usedVirPage[NumPhysPages];  // record used state of the virtual memory page
     TranslationEntry *mainTable[NumPhysPages]; 
 	int replacementType; 	// record use replacement algorithm
 	int fifo;  // for FIFO replacement

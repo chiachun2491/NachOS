@@ -1,4 +1,4 @@
-// exception.cc 
+// exception.cc
 //	Entry point into the Nachos kernel from user programs.
 //	There are two kinds of things that can cause control to
 //	transfer back to here from user code:
@@ -9,7 +9,7 @@
 //
 //	exceptions -- The user code does something that the CPU can't handle.
 //	For instance, accessing memory that doesn't exist, arithmetic errors,
-//	etc.  
+//	etc.
 //
 //	Interrupts (which can also cause control to transfer from user
 //	code into the Nachos kernel) are handled elsewhere.
@@ -18,7 +18,7 @@
 // Everything else core dumps.
 //
 // Copyright (c) 1992-1996 The Regents of the University of California.
-// All rights reserved.  See copyright.h for copyright notice and limitation 
+// All rights reserved.  See copyright.h for copyright notice and limitation
 // of liability and disclaimer of warranty provisions.
 
 #include "copyright.h"
@@ -39,38 +39,39 @@
 //		arg3 -- r6
 //		arg4 -- r7
 //
-//	The result of the system call, if any, must be put back into r2. 
+//	The result of the system call, if any, must be put back into r2.
 //
 // And don't forget to increment the pc before returning. (Or else you'll
 // loop making the same system call forever!
 //
-//	"which" is the kind of exception.  The list of possible exceptions 
+//	"which" is the kind of exception.  The list of possible exceptions
 //	are in machine.h.
 //----------------------------------------------------------------------
 
-void
-ExceptionHandler(ExceptionType which)
+void ExceptionHandler(ExceptionType which)
 {
-	int	type = kernel->machine->ReadRegister(2);
-	int	val;
+	int type = kernel->machine->ReadRegister(2);
+	int val;
 
-    switch (which) {
+	switch (which)
+	{
 	case SyscallException:
-	    switch(type) {
+		switch (type)
+		{
 		case SC_Halt:
-		    DEBUG(dbgAddr, "Shutdown, initiated by user program.\n");
-   		    kernel->interrupt->Halt();
-		    break;
+			DEBUG(dbgAddr, "Shutdown, initiated by user program.\n");
+			kernel->interrupt->Halt();
+			break;
 		case SC_PrintInt:
-			val=kernel->machine->ReadRegister(4);
-			cout << "Print integer:" <<val << endl;
+			val = kernel->machine->ReadRegister(4);
+			cout << "Print integer:" << val << endl;
 			return;
 		case SC_Sleep:
-			val=kernel->machine->ReadRegister(4);
-			cout << "Sleep time:" <<val << "ms" << endl;
+			val = kernel->machine->ReadRegister(4);
+			cout << "Sleep time:" << val << "ms" << endl;
 			kernel->alarm->WaitUntil(val);
 			return;
-/*		case SC_Exec:
+		/*		case SC_Exec:
 			DEBUG(dbgAddr, "Exec\n");
 			val = kernel->machine->ReadRegister(4);
 			kernel->StringCopy(tmpStr, retVal, 1024);
@@ -78,27 +79,30 @@ ExceptionHandler(ExceptionType which)
 			val = kernel->Exec(val);
 			kernel->machine->WriteRegister(2, val);
 			return;
-*/		case SC_Exit:
+*/
+		case SC_Exit:
 			DEBUG(dbgAddr, "Program exit\n");
-			val=kernel->machine->ReadRegister(4);
+			val = kernel->machine->ReadRegister(4);
 			cout << "return value:" << val << endl;
 			kernel->currentThread->Finish();
 			break;
 		default:
-		    cerr << "Unexpected system call " << type << "\n";
- 		    break;
-	    }
-	    break;
+			cerr << "Unexpected system call " << type << "\n";
+			break;
+		}
+		break;
 
 	case PageFaultException:
 		kernel->stats->numPageFaults++;
 
 		int j = 0;
-		while(kernel->machine->usedPhyPage[j] == true && j < NumPhysPages) {
+		while (kernel->machine->usedPhyPage[j] == true && j < NumPhysPages)
+		{
 			j++;
 		}
 
-		if (j < NumPhysPages) {
+		if (j < NumPhysPages)
+		{
 			char *buf = new char[PageSize]; // Save temp Page
 			kernel->machine->usedPhyPage[j] = true;
 			kernel->machine->mainTable[j] = &pageTable[vpn];
@@ -110,26 +114,31 @@ ExceptionHandler(ExceptionType which)
 			kernel->virtualMem_disk->ReadSector(pageTable[vpn].virtualPage, buf);
 			bcopy(buf, &mainMemory[j * PageSize], PageSize);
 		}
-		else {
+		else
+		{
 			char *buf_1 = new char[PageSize];
 			char *buf_2 = new char[PageSize];
 
-
-			if (kernel->machine->replacementType == Replace_FIFO) {
+			if (kernel->machine->replacementType == Replace_FIFO)
+			{
 				target = kernel->machine->fifo % NumPhysPages;
 			}
-			else if (kernel->machine->replacementType == Replace_LRU) {
+			else if (kernel->machine->replacementType == Replace_LRU)
+			{
 				int min = pageTable[0].count;
 				target = 0;
-				for (int i = 0; i < NumPhysPages; i++) {
-					if (min > pageTable[i].count) {
+				for (int i = 0; i < NumPhysPages; i++)
+				{
+					if (min > pageTable[i].count)
+					{
 						min = pageTable[i].count;
 						target = i;
 					}
 				}
 				pageTable[target].count++;
 			}
-			else {
+			else
+			{
 				target = kernel->machine->fifo % NumPhysPages;
 			}
 
@@ -150,10 +159,11 @@ ExceptionHandler(ExceptionType which)
 			kernel->machine->fifo++;
 
 			cout << "Page replacement finished" << endl;
-		break;
-	default:
-	    cerr << "Unexpected user mode exception" << which << "\n";
-	    break;
-    }
-    ASSERTNOTREACHED();
-}
+			break;
+		}
+		default:
+			cerr << "Unexpected user mode exception" << which << "\n";
+			break;
+		}
+		ASSERTNOTREACHED();
+	}
