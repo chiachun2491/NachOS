@@ -92,8 +92,7 @@ AddrSpace::~AddrSpace()
 {
    for(int i = 0; i < numPages; i++) {
         AddrSpace::usedPhyPage[pageTable[i].physicalPage] = false;
-        pageTable[i].valid = false;
-        pageTable[i].use = true;
+        AddrSpace::usedVirPage[pageTable[i].virtualPage] = false;
     }
    delete pageTable;
 }
