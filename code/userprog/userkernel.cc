@@ -45,6 +45,7 @@ UserProgKernel::UserProgKernel(int argc, char **argv)
 	}
 	// Replacement Algorithm set
 	else if (strcmp(argv[i], "-r") == 0) {
+		
 		if (strcmp(argv[i+1], "FIFO") == 0) {
 			kernel->machine->replacementType = Replace_FIFO;
 			cout << "Replacement Algorithm set FIFO." << endl;
