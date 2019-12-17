@@ -3,23 +3,16 @@
 
 int main()
 {
-    int i, k;
-	unsigned int j;
-
-
-	static int arr[1000];
-//	int brr[size];
-   	
+	int i;
+	static int arr[SIZE];
 
     PrintInt(0);
-    for( i=1 ; i< 1000 ; ++i )
+    for( i = 1 ; i< 1000 ; ++i )
     {
-        //PrintInt(i);
-		arr[i] = arr[i] + i + 87;
-        
+	arr[i] = arr[i] + i + 87;
     }
 
-    // PrintInt(arr[size-1]);
+    PrintInt(arr[SIZE - 1]);
 
     return 0;
 }
