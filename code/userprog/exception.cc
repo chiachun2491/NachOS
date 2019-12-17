@@ -82,7 +82,7 @@ void ExceptionHandler(ExceptionType which)
 			val = kernel->Exec(val);
 			kernel->machine->WriteRegister(2, val);
 			return;
-*/
+		*/
 		case SC_Exit:
 			DEBUG(dbgAddr, "Program exit\n");
 			val = kernel->machine->ReadRegister(4);
@@ -163,6 +163,7 @@ void ExceptionHandler(ExceptionType which)
 
 			cout << "Page replacement finished" << endl;
 		}
+		return;
 		break;
 	default:
 		cerr << "Unexpected user mode exception" << which << "\n";
