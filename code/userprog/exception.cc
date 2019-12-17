@@ -52,6 +52,9 @@ void ExceptionHandler(ExceptionType which)
 {
 	int type = kernel->machine->ReadRegister(2);
 	int val;
+	int target; 	// target page to swap out
+    unsigned int vpn, offset;
+	int j;
 
 	switch (which)
 	{
@@ -95,7 +98,7 @@ void ExceptionHandler(ExceptionType which)
 	case PageFaultException:
 		kernel->stats->numPageFaults++;
 
-		int j = 0;
+		j=0;
 		while (kernel->machine->usedPhyPage[j] == true && j < NumPhysPages)
 		{
 			j++;
@@ -105,14 +108,14 @@ void ExceptionHandler(ExceptionType which)
 		{
 			char *buf = new char[PageSize]; // Save temp Page
 			kernel->machine->usedPhyPage[j] = true;
-			kernel->machine->mainTable[j] = &pageTable[vpn];
+			kernel->machine->mainTable[j] = &kernel->machine->pageTable[vpn];
 
 			kernel->machine->pageTable[vpn].physicalPage = j;
 			kernel->machine->pageTable[vpn].valid = true;
 			kernel->machine->pageTable[vpn].count++;
 
 			kernel->virtualMem_disk->ReadSector(kernel->machine->pageTable[vpn].virtualPage, buf);
-			bcopy(buf, &mainMemory[j * PageSize], PageSize);
+			bcopy(buf, &kernel->machine->mainMemory[j * PageSize], PageSize);
 		}
 		else
 		{
@@ -144,9 +147,9 @@ void ExceptionHandler(ExceptionType which)
 
 			cout << "Number = " << target << "page swap out." << endl;
 
-			bcopy(&mainMemory[target * PageSize], buf_1, PageSize);
+			bcopy(&kernel->machine->mainMemory[target * PageSize], buf_1, PageSize);
 			kernel->virtualMem_disk->ReadSector(kernel->machine->pageTable[vpn].virtualPage, buf_2);
-			bcopy(buf_2, &mainMemory[target * PageSize], PageSize);
+			bcopy(buf_2, &kernel->machine->mainMemory[target * PageSize], PageSize);
 			kernel->virtualMem_disk->WriteSector(kernel->machine->pageTable[vpn].virtualPage, buf_1);
 
 			kernel->machine->mainTable[target]->virtualPage = kernel->machine->pageTable[vpn].virtualPage;
