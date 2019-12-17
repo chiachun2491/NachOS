@@ -91,7 +91,11 @@ AddrSpace::AddrSpace()
 AddrSpace::~AddrSpace()
 {
    for(int i = 0; i < numPages; i++)
+   {
         kernel->machine->usedPhyPage[pageTable[i].physicalPage] = false;
+        pageTable[i].valid = false;
+        pageTable[i].use = true;
+   }
    delete pageTable;
 }
 
